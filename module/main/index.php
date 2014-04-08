@@ -20,7 +20,7 @@ require_once "../init.php";
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/js/extjs/resources/css/ext-all-neptune.css" />
-	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/css/Jaring.css" />
+	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/css/jaring.css" />
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>layout.css" />
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>app.css" />
 
@@ -36,7 +36,7 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/GridHeaderToolTip.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/ProgressBarPager.js"></script>
 
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/Jaring.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jaring.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/StorePaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/ComboPaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/Form.js"></script>
