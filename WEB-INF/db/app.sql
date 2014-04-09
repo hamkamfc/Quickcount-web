@@ -101,6 +101,20 @@ insert into jaring._menu (
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,33	,4);
 
 insert into jaring._menu (
+	id	,pid	,type	,label			,icon	,image	,module						, description
+) values (
+	34	,30		,1		,'Surat Suara DPR'	,'menu'	,''		,'Evaluasi_SuratSuara_DPR'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,34	,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label			,icon	,image	,module						, description
+) values (
+	35	,30		,1		,'Surat Suara DPRD'	,'menu'	,''		,'Evaluasi_SuratSuara_DPRD'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,35	,4);
+
+insert into jaring._menu (
 	id	,pid	,type	,label			,icon	,image	,module					, description
 ) values (
 	40	,0		,1		,'Tabulasi'		,'menu'	,''		,'Tabulasi'	,''
