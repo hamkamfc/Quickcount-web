@@ -19,7 +19,7 @@ Ext.define ("Jx.Store", {
 	,	proxy		:
 		{
 			type		:"ajax"
-		,	filterParam	:undefined
+		,	filterParam	:"filter"
 		,	extraParams	:
 			{
 				action		:"read"

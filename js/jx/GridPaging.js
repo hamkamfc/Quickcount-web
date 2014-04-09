@@ -35,7 +35,7 @@ Ext.define ("Jx.GridPaging", {
 	,	showButtonText		:false		// true, to show icon and text on buttons.
 	,	lastSearchStr		:""
 	,	selectedData		:[]			// array of selected row
-	,	buttons				:[]
+	,	addButtons			:[]
 	}
 
 ,	constructor		:function (config)

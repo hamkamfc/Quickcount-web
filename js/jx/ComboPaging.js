@@ -9,10 +9,11 @@ Ext.define ("Jx.ComboPaging", {
 	extend			:"Ext.form.field.ComboBox"
 ,	alias			:"jx.combopaging"
 ,	forceSelection	:true
-,	pageSize		:_g_paging_size
+,	pageSize		:Jx.pageSize
 ,	shrinkWrap		:3
 ,	typeAhead		:true
 ,	typeAheadDelay	:500
+,	queryMode		:"remote"
 ,	listConfig		:
 	{
 		loadingText		:"Loading ..."
