@@ -75,7 +75,7 @@ create table saksi_default (
 insert into jaring._menu (
 	id	,pid	,type	,label		,icon	,image	,module				, description
 ) values (
-	30	,0		,1		,'Evaluasi'	,'menu'	,''		,'Evaluasi'			,''
+	30	,0		,1		,'Validasi'	,'menu'	,''		,'Evaluasi'			,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,30		,4);
 
@@ -99,3 +99,24 @@ insert into jaring._menu (
 	33	,31		,1		,'TPS - Saksi - DPRD'	,'menu'	,''		,'Evaluasi_TpsSaksi_DPRD'	,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,33	,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label			,icon	,image	,module					, description
+) values (
+	40	,0		,1		,'Tabulasi'		,'menu'	,''		,'Tabulasi'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,40	,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label					,icon	,image	,module		, description
+) values (
+	41	,40		,1		,'Per Partai - DPR'		,'menu'	,''		,'Tabulasi_Partai_DPR'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,41	,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label					,icon	,image	,module		, description
+) values (
+	42	,40		,1		,'Per Partai - DPRD'		,'menu'	,''		,'Tabulasi_Partai_DPRD'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,42	,4);
