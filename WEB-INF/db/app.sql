@@ -120,3 +120,17 @@ insert into jaring._menu (
 	42	,40		,1		,'Per Partai - DPRD'		,'menu'	,''		,'Tabulasi_Partai_DPRD'	,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,42	,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label					,icon	,image	,module		, description
+) values (
+	43	,40		,1		,'Per Caleg - DPR'		,'menu'	,''		,'Tabulasi_Caleg_DPR'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,43	,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label					,icon	,image	,module		, description
+) values (
+	44	,40		,1		,'Per Caleg - DPRD'		,'menu'	,''		,'Tabulasi_Caleg_DPRD'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,44	,4);
