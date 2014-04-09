@@ -89,4 +89,3 @@ order by A.partai_id, A.dapil_id, A.no_urut
 }
 
 require_once "../../json_end.php";
-

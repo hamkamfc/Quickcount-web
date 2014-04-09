@@ -71,3 +71,31 @@ create table saksi_default (
 ,	tps_id			integer
 ,	kode_saksi		varchar(64)
 );
+
+insert into jaring._menu (
+	id	,pid	,type	,label		,icon	,image	,module				, description
+) values (
+	30	,0		,1		,'Evaluasi'	,'menu'	,''		,'Evaluasi'			,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,30		,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label			,icon	,image	,module					, description
+) values (
+	31	,30		,1		,'TPS - Saksi'	,'menu'	,''		,'Evaluasi_TpsSaksi'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,31		,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label			,icon	,image	,module					, description
+) values (
+	32	,31		,1		,'TPS - Saksi - DPR'	,'menu'	,''		,'Evaluasi_TpsSaksi_DPR'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,32	,4);
+
+insert into jaring._menu (
+	id	,pid	,type	,label			,icon	,image	,module					, description
+) values (
+	33	,31		,1		,'TPS - Saksi - DPRD'	,'menu'	,''		,'Evaluasi_TpsSaksi_DPRD'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,33	,4);
