@@ -21,6 +21,7 @@ function JxHasilPemilu_DPR ()
 
 	this.cbDapil		= Ext.create ("Jx.ComboPaging", {
 		store			:this.sDapil
+	,	name			:"dapil_id"
 	,	fieldLabel		:"Dapil"
 	,	valueField		:"id"
 	,	displayField	:"nama"
@@ -38,6 +39,7 @@ function JxHasilPemilu_DPR ()
 
 	this.cbKecamatan	= Ext.create ("Jx.ComboPaging", {
 		store			:this.sKecamatan
+	,	name			:"kecamatan_id"
 	,	fieldLabel		:"Kecamatan"
 	,	valueField		:"id"
 	,	displayField	:"nama"
@@ -55,6 +57,7 @@ function JxHasilPemilu_DPR ()
 
 	this.cbKelurahan	= Ext.create ("Jx.ComboPaging", {
 		store			:this.sKelurahan
+	,	name			:"kelurahan_id"
 	,	fieldLabel		:"Kelurahan"
 	,	valueField		:"id"
 	,	displayField	:"nama"
@@ -74,6 +77,7 @@ function JxHasilPemilu_DPR ()
 
 	this.cbTPS			= Ext.create ("Jx.ComboPaging", {
 		store			:this.sTPS
+	,	name			:"tps_id"
 	,	fieldLabel		:"TPS"
 	,	valueField		:"id"
 	,	displayField	:"nama"
@@ -101,8 +105,9 @@ function JxHasilPemilu_DPR ()
 
 	this.cbSaksi		= Ext.create ("Jx.ComboPaging", {
 		store			:this.sSaksi
+	,	name			:"kode_saksi"
 	,	fieldLabel		:"Saksi"
-	,	valueField		:"id"
+	,	valueField		:"kode"
 	,	displayField	:"kode"
 	,	hiddenName		:"kode"
 	});
@@ -138,7 +143,12 @@ function JxHasilPemilu_DPR ()
 	};
 
 	this.bReload	= Ext.create ("Ext.button.Button", {
-		text		:"Muat ulang"
+		text		:"Tampilkan Perhitungan"
+	});
+
+	this.bSetDefault	= Ext.create ("Ext.button.Button", {
+		text			:"Set Saksi sebagai Default"
+	,	tooltip			:"Saksi yang dipilih akan digunakan menjadi perhitungan quick-count di TPS yang bersangkutan."
 	});
 
 	this.form = Ext.create ("Ext.form.Panel", {
@@ -150,8 +160,13 @@ function JxHasilPemilu_DPR ()
 		,	width		:400
 		}
 	,	items	:
-		[
-			this.cbDapil
+		[{
+			xtype	:"numberfield"
+		,	value	:1
+		,	name	:"type"
+		,	hidden	:true
+		}
+		,	this.cbDapil
 		,	this.cbKecamatan
 		,	this.cbKelurahan
 		,	this.cbTPS
@@ -161,6 +176,7 @@ function JxHasilPemilu_DPR ()
 		[	"->"
 		,	this.bReload
 		,	"->"
+		,	this.bSetDefault
 		]
 	});
 
@@ -183,6 +199,9 @@ function JxHasilPemilu_DPR ()
 
 	this.grid	= Ext.create ("Ext.grid.Panel", {
 		store	:this.sHasil
+	,	region	:"east"
+	,	width	:"40%"
+	,	split	:true
 	,	title	:"Hasil Pemilu"
 	,	selType	:"cellmodel"
     ,	plugins	:
@@ -244,6 +263,9 @@ function JxHasilPemilu_DPR ()
 	this.formRekap = Ext.create ("Ext.form.Panel", {
 		title		:"Rekap Suara"
 	,	defaultType	:"numberfield"
+	,	region		:"east"
+	,	width		:"30%"
+	,	split		:true
 	,	defaults	:
 			{
 				allowDecimals	:false
@@ -285,17 +307,9 @@ function JxHasilPemilu_DPR ()
 	,	items	:
 		[
 			this.form
-		,{
-			xtype	:"tabpanel"
-		,	region	:"east"
-		,	width	:"50%"
-		,	split	:true
-		,	items	:
-			[
-				this.grid
-			,	this.formRekap
-			]
-		}]
+		,	this.grid
+		,	this.formRekap
+		]
 	});
 
 	this.reloadDetail = function (b)
@@ -353,12 +367,21 @@ function JxHasilPemilu_DPR ()
 		}
 	};
 
+	this.setSaksiAsDefault = function (b)
+	{
+		var s = this.cbSaksi.getValue();
+
+		if (s === null) {
+			return;
+		}
+
+		this.form.submit ({
+			url	:this.dir +"/../set_default_saksi.php"
+		});
+	}
+
 	this.updateRekap = function (ed, newv, oldv)
 	{
-		console.log ("update rekap");
-
-//		this.formRekap.getForm ().updateRecord ();
-
 		this.formRekap.submit ({
 			url		:this.sRekap.url +"/update.php"
 		,	params	:{
@@ -382,6 +405,7 @@ function JxHasilPemilu_DPR ()
 	this.cbTPS.on ("select", this.cbTpsOnSelect, this);
 
 	this.bReload.on ("click", this.reloadDetail, this);
+	this.bSetDefault.on ("click", this.setSaksiAsDefault, this);
 	this.grid.on ("edit", this.updateHasil, this);
 
 	this.sRekap.on("load", this.sRekapLoaded, this);

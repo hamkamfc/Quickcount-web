@@ -46,20 +46,26 @@ select	A.dapil_id
 ,		A.sah
 ,		A.tidak_sah
 from	rekap_suara_dpr as A
-where	A.dapil_id			= ?
-and		A.kecamatan_id		= ?
-and		A.kelurahan_id		= ?
-and		A.tps_id			= ?
-and		A.kode_saksi		= ?
-";
+where	1 = 1 ";
+
+	if ($dapil_id !== 0 && $dapil_id !== null) {
+		$q .=" and dapil_id = ". $dapil_id;
+	}
+	if ($kecamatan_id !== 0 && $kecamatan_id !== null) {
+		$q .=" and kecamatan_id = ". $kecamatan_id;
+	}
+	if ($kelurahan_id !== 0 && $kelurahan_id !== null) {
+		$q .=" and kelurahan_id = ". $kelurahan_id;
+	}
+	if ($tps_id !== 0 && $tps_id !== null) {
+		$q .=" and tps_id = ". $tps_id;
+	}
+	if ($kode_saksi !== '' && $kode_saksi !== null) {
+		$q .=" and kode_saksi = '". $kode_saksi ."' ";
+	}
 
 	$ps = Jaring::$_db->prepare ($q);
 	$i = 1;
-	$ps->bindValue ($i++, $dapil_id, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $kecamatan_id, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $kelurahan_id, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $tps_id, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $kode_saksi, PDO::PARAM_STR);
 	$ps->execute ();
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();

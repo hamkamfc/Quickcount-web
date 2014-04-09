@@ -60,3 +60,14 @@ insert into jaring._menu (
 	22	,20		,1		,'DPRD'		,'menu'	,''		,'HasilPemilu_DPRD'		,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,22		,4);
+
+drop table saksi_default;
+
+create table saksi_default (
+	type			integer
+,	dapil_id		integer
+,	kecamatan_id	integer
+,	kelurahan_id	integer
+,	tps_id			integer
+,	kode_saksi		varchar(64)
+);

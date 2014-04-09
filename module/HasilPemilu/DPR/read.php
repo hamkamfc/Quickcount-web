@@ -9,16 +9,22 @@
 require_once "../../json_begin.php";
 
 try {
-	$query		= $_GET["query"];
-	$filter		= json_decode ($_GET["filter"]);
-	$dapil_id	= 0;
-	$tps_id		= 0;
-	$kode_saksi	= '';
+	$query			= $_GET["query"];
+	$filter			= json_decode ($_GET["filter"]);
+	$dapil_id		= 0;
+	$kecamatan_id	= 0;
+	$kelurahan_id	= 0;
+	$tps_id			= 0;
+	$kode_saksi		= '';
 
 	if (count($filter) > 0) {
 		for ($i = 0; $i < count($filter); $i++) {
 			if ($filter[$i]->property == "dapil_id") {
 				$dapil_id = $filter[$i]->value;
+			} else if ($filter[$i]->property == "kecamatan_id") {
+				$kecamatan_id = $filter[$i]->value;
+			} else if ($filter[$i]->property == "kelurahan_id") {
+				$kelurahan_id = $filter[$i]->value;
 			} else if ($filter[$i]->property == "tps_id") {
 				$tps_id = $filter[$i]->value;
 			} else if ($filter[$i]->property == "kode_saksi") {
@@ -45,10 +51,20 @@ select	A.id		as caleg_id
 			and		C.partai_id	= A.partai_id
 ";
 
-	if (count($filter) > 0) {
-		for ($i = 0; $i < count($filter); $i++) {
-			$q .=" and ". $filter[$i]->property ." = ". $filter[$i]->value;
-		}
+	if ($dapil_id !== 0 && $dapil_id !== null) {
+		$q .=" and dapil_id = ". $dapil_id;
+	}
+	if ($kecamatan_id !== 0 && $kecamatan_id !== null) {
+		$q .=" and kecamatan_id = ". $kecamatan_id;
+	}
+	if ($kelurahan_id !== 0 && $kelurahan_id !== null) {
+		$q .=" and kelurahan_id = ". $kelurahan_id;
+	}
+	if ($tps_id !== 0 && $tps_id !== null) {
+		$q .=" and tps_id = ". $tps_id;
+	}
+	if ($kode_saksi !== '' && $kode_saksi !== null) {
+		$q .=" and kode_saksi = '". $kode_saksi ."' ";
 	}
 
 	$q	.="
