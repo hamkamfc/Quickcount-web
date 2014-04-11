@@ -1,3 +1,4 @@
 WEB-INF/app.conf
 WEB-INF/db/jaring.sq3
 nbproject/private/*
+uploads/

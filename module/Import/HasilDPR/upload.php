@@ -131,28 +131,53 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 }
 
 // insert to log
-$q = " select 1 from imported where type = 1 and filename = ? ";
-$ps = Jaring::$_db->prepare ($q);
-$ps->bindValue (1, $fileName);
-$ps->execute ();
-$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
-$is_exist = count ($rs);
+//$q = " select 1 from imported where type = 1 and filename = ? ";
+//$ps = Jaring::$_db->prepare ($q);
+//$ps->bindValue (1, $fileName);
+//$ps->execute ();
+//$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
+//$is_exist = count ($rs);
+//
+//// file is already uploaded before, update data on database
+//if ($is_exist > 0) {
+//	$q = " update hasil_dpr set hasil = ? where caleg_id = ? and partai_id = ? ";
+//	$ps = Jaring::$_db->prepare ($q);
+//
+//	foreach ($data as $in) {
+//		$i = 1;
+//		$ps->bindValue ($i++, $in[7], PDO::PARAM_INT);
+//		$ps->bindValue ($i++, $in[5], PDO::PARAM_INT);
+//		$ps->bindValue ($i++, $in[6], PDO::PARAM_INT);
+//		$ps->execute ();
+//	}
+//
+//// insert new data
+//} else {
+	$q	="	delete	from hasil_dpr"
+		."	where	dapil_id		= ?"
+		."	and		kecamatan_id	= ?"
+		."	and		kelurahan_id	= ?"
+		."	and		tps_id			= ?"
+		."	and		kode_saksi		= ?"
+		."	and		partai_id		= ?"
+		."	and		caleg_id		= ?";
 
-// file is already uploaded before, update data on database
-if ($is_exist > 0) {
-	$q = " update hasil_dpr set hasil = ? where caleg_id = ? and partai_id = ? ";
 	$ps = Jaring::$_db->prepare ($q);
 
 	foreach ($data as $in) {
 		$i = 1;
-		$ps->bindValue ($i++, $in[7], PDO::PARAM_INT);
+		$ps->bindValue ($i++, $in[0], PDO::PARAM_INT);
+		$ps->bindValue ($i++, $in[1], PDO::PARAM_INT);
+		$ps->bindValue ($i++, $in[2], PDO::PARAM_INT);
+		$ps->bindValue ($i++, $in[3], PDO::PARAM_INT);
+		$ps->bindValue ($i++, $in[4], PDO::PARAM_STR);
 		$ps->bindValue ($i++, $in[5], PDO::PARAM_INT);
 		$ps->bindValue ($i++, $in[6], PDO::PARAM_INT);
 		$ps->execute ();
 	}
 
-// insert new data
-} else {
+	$ps->closeCursor ();
+
 	$q	=" insert into hasil_dpr (dapil_id, kecamatan_id, kelurahan_id, tps_id, kode_saksi, caleg_id, partai_id, hasil"
 		.") values ("
 		." ?, ?, ?, ?, ?, ?, ?, ?"
@@ -162,7 +187,7 @@ if ($is_exist > 0) {
 	foreach ($data as $in) {
 		$ps->execute ($in);
 	}
-}
+//}
 
 $q = " insert into imported (type, filename) values ( 1 , ? )";
 $ps = Jaring::$_db->prepare ($q);

@@ -44,7 +44,7 @@ select	A.id		as caleg_id
 ,		A.dapil_id
 ,		A.no_urut	as caleg_no_urut
 ,		A.nama		as caleg_nama
-,		(	select	C.hasil
+,		(	select	sum(C.hasil)
 			from	hasil_dpr	C
 			where	C.caleg_id	= A.id
 			and		C.dapil_id	= A.dapil_id

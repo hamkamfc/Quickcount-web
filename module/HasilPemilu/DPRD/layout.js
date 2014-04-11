@@ -10,7 +10,7 @@ function JxHasilPemilu_DPRD ()
 	this.dir	= Jx.generateModDir(this.id);
 
 	this.sDapil		= Ext.create ("Jx.StorePaging", {
-		url			:Jx.generateModDir ("Wilayah_Dapil")
+		url			:Jx.generateModDir ("HasilPemilu_DPRD_Wilayah_Dapil")
 	,	singleApi	:false
 	,	fields		:
 		[
@@ -28,7 +28,7 @@ function JxHasilPemilu_DPRD ()
 	});
 
 	this.sKecamatan = Ext.create ("Jx.StorePaging", {
-		url			:Jx.generateModDir ("Wilayah_Kecamatan")
+		url			:Jx.generateModDir ("HasilPemilu_DPRD_Wilayah_Kecamatan")
 	,	singleApi	:false
 	,	fields		:
 		[
@@ -46,7 +46,7 @@ function JxHasilPemilu_DPRD ()
 	});
 
 	this.sKelurahan = Ext.create ("Jx.StorePaging", {
-		url			:Jx.generateModDir ("Wilayah_Kelurahan")
+		url			:Jx.generateModDir ("HasilPemilu_DPRD_Wilayah_Kelurahan")
 	,	singleApi	:false
 	,	fields		:
 		[
@@ -64,7 +64,7 @@ function JxHasilPemilu_DPRD ()
 	});
 
 	this.sTPS		= Ext.create ("Jx.StorePaging", {
-		url			:Jx.generateModDir ("Wilayah_TPS")
+		url			:Jx.generateModDir ("HasilPemilu_DPRD_Wilayah_TPS")
 	,	singleApi	:false
 	,	fields		:
 		[
@@ -94,12 +94,11 @@ function JxHasilPemilu_DPRD ()
 	});
 
 	this.sSaksi		= Ext.create ("Jx.StorePaging", {
-		url			:Jx.generateModDir ("Wilayah_Saksi")
+		url			:Jx.generateModDir ("HasilPemilu_DPRD_Wilayah_Saksi")
 	,	singleApi	:false
 	,	fields		:
 		[
-			"id"
-		,	"kode"
+			"kode"
 		]
 	});
 

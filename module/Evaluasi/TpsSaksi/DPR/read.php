@@ -39,9 +39,9 @@ order by A.id, B.id, C.id, D.id
 ";
 
 	if ($showEmptyOnly === "true") {
-		$q =" select count(X.kode_saksi) from ( ". $q_sub ." ) X where X.kode_saksi is null ";
+		$q =" select count(X.kode_saksi) as total from ( ". $q_sub ." ) X where X.kode_saksi is null ";
 	} else {
-		$q =" select count(X.kode_saksi) from ( ". $q_sub ." ) X where X.kode_saksi is not null ";
+		$q =" select count(X.kode_saksi) as total from ( ". $q_sub ." ) X where X.kode_saksi is not null ";
 	}
 
 	$ps = Jaring::$_db->prepare ($q);
