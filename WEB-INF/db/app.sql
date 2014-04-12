@@ -52,9 +52,9 @@ insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,15	
 --
 
 insert into jaring._menu (
-	id	,pid	,type	,label				,icon	,image	,module				, description
+	id	,pid	,type	,label			,icon	,image	,module				, description
 ) values (
-	20	,0		,1		,'Hasil Pemilu'		,'menu'	,''		,'HasilPemilu'		,''
+	20	,0		,1		,'Raw Data'		,'menu'	,''		,'HasilPemilu'		,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,20		,4);
 
@@ -135,27 +135,27 @@ insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,40	,
 insert into jaring._menu (
 	id	,pid	,type	,label					,icon	,image	,module		, description
 ) values (
-	41	,40		,1		,'Per Partai - DPR'		,'menu'	,''		,'Tabulasi_Partai_DPR'	,''
+	41	,40		,0		,'Per Partai - DPR'		,'menu'	,''		,'Tabulasi_Partai_DPR'	,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,41	,4);
 
 insert into jaring._menu (
 	id	,pid	,type	,label					,icon	,image	,module		, description
 ) values (
-	42	,40		,1		,'Per Partai - DPRD'		,'menu'	,''		,'Tabulasi_Partai_DPRD'	,''
+	42	,40		,0		,'Per Partai - DPRD'		,'menu'	,''		,'Tabulasi_Partai_DPRD'	,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,42	,4);
 
 insert into jaring._menu (
-	id	,pid	,type	,label					,icon	,image	,module		, description
+	id	,pid	,type	,label		,icon	,image	,module		, description
 ) values (
-	43	,40		,1		,'Per Caleg - DPR'		,'menu'	,''		,'Tabulasi_Caleg_DPR'	,''
+	43	,40		,1		,'DPR'		,'menu'	,''		,'Tabulasi_Caleg_DPR'	,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,43	,4);
 
 insert into jaring._menu (
-	id	,pid	,type	,label					,icon	,image	,module		, description
+	id	,pid	,type	,label		,icon	,image	,module		, description
 ) values (
-	44	,40		,1		,'Per Caleg - DPRD'		,'menu'	,''		,'Tabulasi_Caleg_DPRD'	,''
+	44	,40		,1		,'DPRD'		,'menu'	,''		,'Tabulasi_Caleg_DPRD'	,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,44	,4);

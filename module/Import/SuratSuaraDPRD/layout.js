@@ -90,7 +90,9 @@ function JxImport_SuratSuaraDPRD ()
 
 	this.panel	= Ext.create ("Ext.container.Container",
 		{
-			layout	:"border"
+			title	:"Surat Suara > DPRD"
+		,	closable:true
+		,	layout	:"border"
 		,	items	:
 			[
 				this.grid

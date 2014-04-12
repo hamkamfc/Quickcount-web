@@ -97,18 +97,24 @@ function JxTabulasi_Caleg_DPRD ()
 		[
 			"partai_nama"
 		,	"caleg_nama"
-		,	"hasil"
-		]
+		,{
+			name:"hasil"
+		,	type:"int"
+		},{
+			name:"persentase"
+		,	type:"float"
+		}]
 	});
 
 	this.grid	= Ext.create ("Ext.grid.Panel", {
-		title	:"Tabulasi per Caleg - DPRD"
+		title	:"Tabulasi Perolehan Suara DPRD"
 	,	region	:"center"
 	,	store	:this.store
 	,	features:
 		[{
-			ftype			:"grouping"
+			ftype			:"groupingsummary"
 		,	hideGroupHeader	:true
+		,	startCollapsed	:true
 		}]
 	,	columns	:
 		[{
@@ -119,15 +125,30 @@ function JxTabulasi_Caleg_DPRD ()
 			header		:"Nama Caleg"
 		,	dataIndex	:"caleg_nama"
 		,	flex		:1
+		,	summaryRenderer	:function (v)
+			{
+				return "Total suara partai dan caleg : ";
+			}
 		},{
 			header		:"Hasil"
 		,	dataIndex	:"hasil"
 		,	width		:200
+		,	summaryType	:"sum"
+		},{
+			header		:"Persentase"
+		,	dataIndex	:"persentase"
+		,	summaryType	:"sum"
+		,	renderer	:function (v)
+			{
+				return v +" %";
+			}
 		}]
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		layout	:"border"
+		title	:"Hasil Pemilu > DPRD"
+	,	closable:true
+	,	layout	:"border"
 	,	items	:
 		[
 			this.form

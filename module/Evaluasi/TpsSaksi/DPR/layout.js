@@ -35,7 +35,8 @@ function JxEvaluasi_TpsSaksi_DPR ()
 	});
 
 	this.panel			= Ext.create ("Jx.GridPaging", {
-		title			:"Evaluasi TPS - Saksi >> DPR"
+		title			:"Evaluasi TPS - Saksi > DPR"
+	,	closable		:true
 	,	store			:this.store
 	,	buttonBarList	:["refresh"]
 	,	addButtons		:

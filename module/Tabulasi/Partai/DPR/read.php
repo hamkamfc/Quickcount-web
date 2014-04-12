@@ -24,11 +24,26 @@ try {
 		$qwhere .= " and kelurahan_id = ". $kelurahan_id;
 	}
 
+	$q=
+"
+	select	sum(hasil)	as pembagi
+	from	hasil_dpr
+	where	status = 1
+".	$qwhere;
+
+	$ps = Jaring::$_db->prepare ($q);
+	$ps->execute ();
+	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
+	$ps->closeCursor ();
+
+	$pembagi = $rs[0]["pembagi"];
+
 	$q	=
 "
 select	X.partai_id
 ,		X.partai_nama
 ,		X.hasil
+,		((X.hasil / ". $pembagi .") * 100) as persentase
 from (
 	select	P.id		as partai_id
 	,		P.nama		as partai_nama

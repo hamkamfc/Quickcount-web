@@ -303,7 +303,9 @@ function JxHasilPemilu_DPRD ()
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		layout	:"border"
+		title	:"Raw Data > DPRD"
+	,	closable:true
+	,	layout	:"border"
 	,	items	:
 		[
 			this.form

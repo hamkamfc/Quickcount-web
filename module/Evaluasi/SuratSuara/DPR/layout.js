@@ -139,8 +139,11 @@ function JxEvaluasi_SuratSuara_DPR ()
 		}]
 	});
 
-	this.panel	= Ext.create ("Ext.container.Container", {
-		layout	:"border"
+	this.panel	= Ext.create ("Ext.container.Container",
+	{
+		title	:"Validasi > Surat Suara > DPR"
+	,	closable:true
+	,	layout	:"border"
 	,	items	:
 		[
 			this.form

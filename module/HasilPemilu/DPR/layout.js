@@ -200,9 +200,9 @@ function JxHasilPemilu_DPR ()
 	this.grid	= Ext.create ("Ext.grid.Panel", {
 		store	:this.sHasil
 	,	region	:"east"
-	,	width	:"40%"
+	,	width	:"30%"
 	,	split	:true
-	,	title	:"Hasil Pemilu"
+	,	title	:"Raw Data (Dari Semua Saksi)"
 	,	selType	:"cellmodel"
     ,	plugins	:
 		[
@@ -303,7 +303,9 @@ function JxHasilPemilu_DPR ()
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		layout	:"border"
+		title	:"Raw Data > DPR"
+	,	closable:true
+	,	layout	:"border"
 	,	items	:
 		[
 			this.form

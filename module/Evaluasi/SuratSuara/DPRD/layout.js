@@ -140,7 +140,9 @@ function JxEvaluasi_SuratSuara_DPRD ()
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		layout	:"border"
+		title	:"Validasi > Surat Suara > DPRD"
+	,	closable:true
+	,	layout	:"border"
 	,	items	:
 		[
 			this.form

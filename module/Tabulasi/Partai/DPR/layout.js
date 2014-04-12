@@ -96,11 +96,13 @@ function JxTabulasi_Partai_DPR ()
 		[
 			"partai_nama"
 		,	"hasil"
+		,	"persentase"
 		]
 	});
 
 	this.grid	= Ext.create ("Ext.grid.Panel", {
-		title	:"Tabulasi per Partai DPR"
+		title	:"Suara Partai DPR"
+	,	closable:true
 	,	region	:"center"
 	,	store	:this.store
 	,	columns	:
@@ -112,11 +114,16 @@ function JxTabulasi_Partai_DPR ()
 			header		:"Hasil"
 		,	dataIndex	:"hasil"
 		,	width		:200
+		},{
+			header		:"Persentase"
+		,	dataIndex	:"persentase"
 		}]
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		layout	:"border"
+		title	:"Hasil Pemilu > per Partai DPR"
+	,	closable:true
+	,	layout	:"border"
 	,	items	:
 		[
 			this.form
