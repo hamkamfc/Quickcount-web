@@ -72,6 +72,7 @@ function JxEvaluasi_TpsSaksi_DPR ()
 
 	this.doRefresh = function (perm)
 	{
+		this.store.getProxy ().extraParams.showEmptyOnly = this.showEmptyOnly.getValue ();
 		this.store.load ();
 	};
 }
