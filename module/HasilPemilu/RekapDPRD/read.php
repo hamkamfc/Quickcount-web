@@ -33,36 +33,44 @@ try {
 		}
 	}
 
-	// Get data
-	$q	="
-select	A.dapil_id
-,		A.kecamatan_id
-,		A.kelurahan_id
-,		A.tps_id
-,		A.kode_saksi
-,		A.jumlah
-,		A.rusak
-,		A.sisa
-,		A.sah
-,		A.tidak_sah
-from	rekap_suara_dprd as A
-where	1 = 1 ";
+	$qwhere = "";
+	$qgroup	= "";
 
 	if ($dapil_id !== 0 && $dapil_id !== null) {
-		$q .=" and dapil_id = ". $dapil_id;
+		$qwhere .=" and dapil_id = ". $dapil_id;
+		$qgroup .=" dapil_id ";
 	}
 	if ($kecamatan_id !== 0 && $kecamatan_id !== null) {
-		$q .=" and kecamatan_id = ". $kecamatan_id;
+		$qwhere .=" and kecamatan_id = ". $kecamatan_id;
+		$qgroup .=" , kecamatan_id ";
 	}
 	if ($kelurahan_id !== 0 && $kelurahan_id !== null) {
-		$q .=" and kelurahan_id = ". $kelurahan_id;
+		$qwhere .=" and kelurahan_id = ". $kelurahan_id;
+		$qgroup .=" , kelurahan_id ";
 	}
 	if ($tps_id !== 0 && $tps_id !== null) {
-		$q .=" and tps_id = ". $tps_id;
+		$qwhere .=" and tps_id = ". $tps_id;
+		$qgroup .=" , tps_id ";
 	}
 	if ($kode_saksi !== '' && $kode_saksi !== null) {
-		$q .=" and kode_saksi = '". $kode_saksi ."' ";
+		$qwhere .=" and kode_saksi = '". $kode_saksi ."' ";
+		$qgroup .=" , kode_saksi ";
 	}
+
+
+	// Get data
+	$q	="
+select	ifnull(sum(A.jumlah),0)		as jumlah
+,		ifnull(sum(A.rusak),0)		as rusak
+,		ifnull(sum(A.sisa),0)		as sisa
+,		ifnull(sum(A.sah),0)		as sah
+,		ifnull(sum(A.tidak_sah),0)	as tidak_sah
+from	rekap_suara_dprd as A
+where	1 = 1 ". $qwhere;
+
+if (! empty ($qgroup)) {
+	$q .= " group by ". $qgroup;
+}
 
 	$ps = Jaring::$_db->prepare ($q);
 	$i = 1;

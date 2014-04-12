@@ -33,6 +33,24 @@ try {
 		}
 	}
 
+	$qwhere = "";
+
+	if ($dapil_id !== 0 && $dapil_id !== null) {
+		$qwhere .=" and dapil_id = ". $dapil_id;
+	}
+	if ($kecamatan_id !== 0 && $kecamatan_id !== null) {
+		$qwhere .=" and kecamatan_id = ". $kecamatan_id;
+	}
+	if ($kelurahan_id !== 0 && $kelurahan_id !== null) {
+		$qwhere .=" and kelurahan_id = ". $kelurahan_id;
+	}
+	if ($tps_id !== 0 && $tps_id !== null) {
+		$qwhere .=" and tps_id = ". $tps_id;
+	}
+	if ($kode_saksi !== '' && $kode_saksi !== null) {
+		$qwhere .=" and kode_saksi = '". $kode_saksi ."' ";
+	}
+
 	// Get data
 	$q	="
 select	A.id		as caleg_id
@@ -44,33 +62,23 @@ select	A.id		as caleg_id
 ,		A.dapil_id
 ,		A.no_urut	as caleg_no_urut
 ,		A.nama		as caleg_nama
-,		(	select	sum(C.hasil)
+,		ifnull((
+			select	sum(C.hasil)
 			from	hasil_dprd	C
 			where	C.caleg_id	= A.id
 			and		C.dapil_id	= A.dapil_id
 			and		C.partai_id	= A.partai_id
-";
-
-	if ($dapil_id !== 0 && $dapil_id !== null) {
-		$q .=" and dapil_id = ". $dapil_id;
-	}
-	if ($kecamatan_id !== 0 && $kecamatan_id !== null) {
-		$q .=" and kecamatan_id = ". $kecamatan_id;
-	}
-	if ($kelurahan_id !== 0 && $kelurahan_id !== null) {
-		$q .=" and kelurahan_id = ". $kelurahan_id;
-	}
-	if ($tps_id !== 0 && $tps_id !== null) {
-		$q .=" and tps_id = ". $tps_id;
-	}
-	if ($kode_saksi !== '' && $kode_saksi !== null) {
-		$q .=" and kode_saksi = '". $kode_saksi ."' ";
-	}
-
-	$q	.="
-		)			as hasil
+			". $qwhere ."
+		), 0)		as hasil
 from	caleg_dprd	A
-where	A.dapil_id	= ". $dapil_id ."
+where	1 = 1 ";
+
+	if ($dapil_id !== null && $dapil_id > 0) {
+		$q .= " and A.dapil_id	= ". $dapil_id;
+	}
+
+$q .=
+"
 order by A.partai_id, A.dapil_id, A.no_urut
 ";
 
@@ -89,4 +97,3 @@ order by A.partai_id, A.dapil_id, A.no_urut
 }
 
 require_once "../../json_end.php";
-

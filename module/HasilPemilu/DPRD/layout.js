@@ -8,6 +8,7 @@ function JxHasilPemilu_DPRD ()
 {
 	this.id		= "HasilPemilu_DPRD";
 	this.dir	= Jx.generateModDir(this.id);
+	this.onload = false;
 
 	this.sDapil		= Ext.create ("Jx.StorePaging", {
 		url			:Jx.generateModDir ("HasilPemilu_DPRD_Wilayah_Dapil")
@@ -313,6 +314,8 @@ function JxHasilPemilu_DPRD ()
 
 	this.reloadDetail = function (b)
 	{
+		this.onload = true;
+
 		var filters = [
 			{property:"dapil_id"		, value:this.cbDapil.getValue ()}
 		,	{property:"kecamatan_id"	, value:this.cbKecamatan.getValue ()}
@@ -364,6 +367,7 @@ function JxHasilPemilu_DPRD ()
 			this.sRekap.add (o);
 			this.formRekap.loadRecord (o);
 		}
+		this.onload = false;
 	};
 
 	this.setSaksiAsDefault = function (b)
@@ -375,7 +379,10 @@ function JxHasilPemilu_DPRD ()
 		}
 
 		this.form.submit ({
-			url	:this.dir +"/../set_default_saksi.php"
+			url		:this.dir +"/../set_default_saksi.php"
+		,	params	:{
+				mod		:"dprd"
+			}
 		});
 	}
 
