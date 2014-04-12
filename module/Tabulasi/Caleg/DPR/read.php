@@ -26,23 +26,22 @@ try {
 
 	$q	=
 "
-select	P.nama	as partai_nama
-,		A.nama	as caleg_nama
+select	A.nama	as caleg_nama
+,		(
+			select	P.nama
+			from	partai P
+			where	P.id = A.partai_id
+		) as partai_nama
 ,		ifnull((
 			select	sum(hasil)
 			from	hasil_dpr	H
 			where	H.caleg_id	= A.id
 			and		H.partai_id	= A.partai_id
-			and		H.kode_saksi in (
-						select	SD.kode_saksi
-						from	saksi_default	SD
-						where	SD.type	= 1
-							". $qwhere ."
-					)
+			and		H.status	= 1
+			". $qwhere ."
 		), 0) as hasil
 from	caleg_dpr	A
-,		partai		P
-where	A.partai_id = P.id
+where	1 = 1
 ";
 
 	if ($dapil_id !== null && $dapil_id > 0) {
@@ -51,7 +50,7 @@ where	A.partai_id = P.id
 
 $q .="
 group by A.nama
-order by A.partai_id, A.nama;
+order by A.partai_id, A.no_urut, A.nama;
 ";
 
 	$ps = Jaring::$_db->prepare ($q);

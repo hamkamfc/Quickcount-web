@@ -23,6 +23,7 @@ try {
 	if ($kelurahan_id !== null && $kelurahan_id > 0) {
 		$qwhere .= " and kelurahan_id = ". $kelurahan_id;
 	}
+
 	$q	=
 "
 select	X.partai_id
@@ -34,20 +35,18 @@ from (
 	,		ifnull((
 				select	sum(A.hasil)
 				from	hasil_dpr	A
-				where	P.id = A.partai_id
-				and		A.kode_saksi in (
-							select	distinct
-									SD.kode_saksi
-							from	saksi_default	SD
-							where	SD.type			= 1
-								". $qwhere ."
-						)
+				,		caleg_dpr	C
+				where	A.partai_id = P.id
+				and		A.status	= 1
+				and		A.caleg_id	= C.id
+				and		C.type		= 1
+				and		A.partai_id	= C.partai_id
 						". $qwhere ."
 				group by A.partai_id
 			),0) as hasil
 	from	partai P
 ) X
-order by X.hasil desc;
+order by X.hasil desc
 ";
 
 	$ps = Jaring::$_db->prepare ($q);

@@ -12,49 +12,45 @@ try {
 	$dapil_id		= $_GET["dapil_id"];
 	$kecamatan_id	= $_GET["kecamatan_id"];
 	$kelurahan_id	= $_GET["kelurahan_id"];
+	$qwhere			= "";
+
+	if ($dapil_id !== null && $dapil_id > 0) {
+		$qwhere .= " and dapil_id = ". $dapil_id;
+	}
+	if ($kecamatan_id !== null && $kecamatan_id > 0) {
+		$qwhere .= " and kecamatan_id = ". $kecamatan_id;
+	}
+	if ($kelurahan_id !== null && $kelurahan_id > 0) {
+		$qwhere .= " and kelurahan_id = ". $kelurahan_id;
+	}
 
 	$q	=
 "
-select	P.nama	as partai_nama
-,		A.nama	as caleg_nama
+select	A.nama	as caleg_nama
+,		(
+			select	P.nama
+			from	partai P
+			where	P.id = A.partai_id
+		) as partai_nama
 ,		ifnull((
 			select	sum(hasil)
 			from	hasil_dprd	H
 			where	H.caleg_id	= A.id
 			and		H.partai_id	= A.partai_id
-			and		H.kode_saksi in (
-						select	SD.kode_saksi
-						from	saksi_default	SD
-						where	SD.type	= 2
-";
-
-						if ($dapil_id !== null && $dapil_id > 0) {
-							$q .= " and SD.dapil_id = ". $dapil_id;
-						}
-						if ($kecamatan_id !== null && $kecamatan_id > 0) {
-							$q .= " and SD.kecamatan_id = ". $kecamatan_id;
-						}
-						if ($kelurahan_id !== null && $kelurahan_id > 0) {
-							$q .= " and SD.kelurahan_id = ". $kelurahan_id;
-						}
-	$q .=
-"
-					)
+			and		H.status	= 1
+			". $qwhere ."
 		), 0) as hasil
 from	caleg_dprd	A
-,		partai		P
-where	A.no_urut != 0
-and		A.partai_id = P.id
+where	1 = 1
 ";
 
 	if ($dapil_id !== null && $dapil_id > 0) {
 		$q .= " and A.dapil_id = ". $dapil_id;
 	}
 
-	$q.=
-"
+$q .="
 group by A.nama
-order by A.partai_id, A.nama;
+order by A.partai_id, A.no_urut, A.nama;
 ";
 
 	$ps = Jaring::$_db->prepare ($q);

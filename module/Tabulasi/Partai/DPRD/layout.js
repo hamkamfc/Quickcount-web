@@ -163,7 +163,7 @@ function JxTabulasi_Partai_DPRD ()
 	{
 		this.store.getProxy ().extraParams = {
 			dapil_id		: this.cbDapil.getValue ()
-		,	kecataman_id	: this.cbKecamatan.getValue ()
+		,	kecamatan_id	: this.cbKecamatan.getValue ()
 		,	kelurahan_id	: this.cbKelurahan.getValue ()
 		};
 
