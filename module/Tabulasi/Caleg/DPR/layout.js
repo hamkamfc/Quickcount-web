@@ -141,7 +141,7 @@ function JxTabulasi_Caleg_DPR ()
 		,	summaryType	:"sum"
 		,	renderer	:function (v)
 			{
-				return v +" %";
+				return (Math.round (v * 100) / 100) +" %";
 			}
 		}]
 	});

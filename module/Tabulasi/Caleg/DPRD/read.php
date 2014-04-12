@@ -17,65 +17,45 @@ try {
 	$qwhere			= "";
 
 	if ($dapil_id !== null && $dapil_id > 0) {
-		$qwhere .= " and dapil_id = ". $dapil_id;
+		$qwhere .= " and HD.dapil_id = ". $dapil_id;
 	}
 	if ($kecamatan_id !== null && $kecamatan_id > 0) {
-		$qwhere .= " and kecamatan_id = ". $kecamatan_id;
+		$qwhere .= " and HD.kecamatan_id = ". $kecamatan_id;
 	}
 	if ($kelurahan_id !== null && $kelurahan_id > 0) {
-		$qwhere .= " and kelurahan_id = ". $kelurahan_id;
+		$qwhere .= " and HD.kelurahan_id = ". $kelurahan_id;
 	}
 
 	$q=
 "
-	select	ifnull(sum(hasil),0)	as pembagi
-	from	". $table_hasil ."
-	where	status = 1
-".	$qwhere;
-
-	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute ();
-	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
-	$ps->closeCursor ();
-
-	$pembagi = $rs[0]["pembagi"];
-
-	$q	=
-"
-select	A.nama	as caleg_nama
-,		(
-			select	P.nama
-			from	partai P
-			where	P.id = A.partai_id
-		) as partai_nama
-,		ifnull((
-			select	sum(hasil)
-			from	". $table_hasil ."	H
-			where	H.caleg_id	= A.id
-			and		H.partai_id	= A.partai_id
-			and		H.status	= 1
-			". $qwhere ."
-		), 0) as hasil
-from	". $table_caleg ."	A
-where	1 = 1
-";
-
-	if ($dapil_id !== null && $dapil_id > 0) {
-		$q .= " and A.dapil_id = ". $dapil_id;
-	}
-
-$q .="
-group by A.nama
-order by A.partai_id, A.no_urut, A.nama
-";
-
-	$q =
-"
-select	X.caleg_nama
-,		X.partai_nama
+select	X.partai_nama
+,		X.caleg_nama
 ,		X.hasil
-,		((X.hasil / ". $pembagi .") * 100) as persentase
-from (". $q .") X
+,		round(((X.hasil / Y.v) * 100), 2) as persentase
+from (
+select	HD.partai_id
+,		CD.caleg_id
+,		P.nama					as partai_nama
+,		C.nama					as caleg_nama
+,		ifnull(sum(hasil),0)	as hasil
+from	". $table_hasil ."	HD
+,		". $table_caleg ."	CD
+,		caleg		C
+,		partai		P
+where	HD.status		= 1
+and		HD.caleg_id		= CD.id
+and		CD.caleg_id		= C.id
+and		HD.partai_id	= P.id
+". $qwhere ."
+group by HD.partai_id, CD.caleg_id
+order by HD.partai_id, CD.caleg_id
+) X
+, (
+	select	ifnull(sum(HD.hasil),0)	as v
+	from	hasil_dpr				HD
+	where	HD.status				= 1
+	". $qwhere ."
+) Y
 ";
 
 	$ps = Jaring::$_db->prepare ($q);

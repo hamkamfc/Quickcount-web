@@ -159,3 +159,10 @@ insert into jaring._menu (
 	44	,40		,1		,'DPRD'		,'menu'	,''		,'Tabulasi_Caleg_DPRD'	,''
 );
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1 ,44	,4);
+
+
+CREATE TABLE `jaring`.`caleg` (
+	`id`	INT NOT NULL AUTO_INCREMENT
+,	`nama`	VARCHAR(128) NULL
+,	PRIMARY KEY (`id`)
+);
