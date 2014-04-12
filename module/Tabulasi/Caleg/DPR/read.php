@@ -12,6 +12,17 @@ try {
 	$dapil_id		= $_GET["dapil_id"];
 	$kecamatan_id	= $_GET["kecamatan_id"];
 	$kelurahan_id	= $_GET["kelurahan_id"];
+	$qwhere			= "";
+
+	if ($dapil_id !== null && $dapil_id > 0) {
+		$qwhere .= " and dapil_id = ". $dapil_id;
+	}
+	if ($kecamatan_id !== null && $kecamatan_id > 0) {
+		$qwhere .= " and kecamatan_id = ". $kecamatan_id;
+	}
+	if ($kelurahan_id !== null && $kelurahan_id > 0) {
+		$qwhere .= " and kelurahan_id = ". $kelurahan_id;
+	}
 
 	$q	=
 "
@@ -26,25 +37,12 @@ select	P.nama	as partai_nama
 						select	SD.kode_saksi
 						from	saksi_default	SD
 						where	SD.type	= 1
-";
-
-						if ($dapil_id !== null && $dapil_id > 0) {
-							$q .= " and SD.dapil_id = ". $dapil_id;
-						}
-						if ($kecamatan_id !== null && $kecamatan_id > 0) {
-							$q .= " and SD.kecamatan_id = ". $kecamatan_id;
-						}
-						if ($kelurahan_id !== null && $kelurahan_id > 0) {
-							$q .= " and SD.kelurahan_id = ". $kelurahan_id;
-						}
-	$q .=
-"
+							". $qwhere ."
 					)
 		), 0) as hasil
 from	caleg_dpr	A
 ,		partai		P
-where	A.no_urut != 0
-and		A.partai_id = P.id
+where	A.partai_id = P.id
 ";
 
 	if ($dapil_id !== null && $dapil_id > 0) {

@@ -41,6 +41,17 @@ insert into jaring._menu (
 insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,14		,4);
 
 insert into jaring._menu (
+	id	,pid	,type	,label			,icon	,image	,module				, description
+) values (
+	15	,10		,1		,'Auto Import'	,'menu'	,''		,'Import_Auto'	,''
+);
+insert into jaring._group_menu (_group_id, _menu_id, permission) values (1		,15		,4);
+
+--
+-- Hasil Pemilu
+--
+
+insert into jaring._menu (
 	id	,pid	,type	,label				,icon	,image	,module				, description
 ) values (
 	20	,0		,1		,'Hasil Pemilu'		,'menu'	,''		,'HasilPemilu'		,''
