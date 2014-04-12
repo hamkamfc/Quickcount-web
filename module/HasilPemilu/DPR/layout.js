@@ -114,6 +114,11 @@ function JxHasilPemilu_DPR ()
 
 	this.cbDapilOnSelect = function (cb, r, e)
 	{
+		this.cbKecamatan.reset();
+		this.cbKelurahan.reset();
+		this.cbTPS.reset ();
+		this.cbSaksi.reset ();
+
 		this.sKecamatan.clearFilter (true);
 		this.sKecamatan.filter ("dapil_id", r[0].get("id"));
 		this.sKelurahan.loadData ([]);
@@ -123,6 +128,10 @@ function JxHasilPemilu_DPR ()
 
 	this.cbKecamatanOnSelect = function (cb, r, e)
 	{
+		this.cbKelurahan.reset();
+		this.cbTPS.reset ();
+		this.cbSaksi.reset ();
+
 		this.sKelurahan.clearFilter (true);
 		this.sKelurahan.filter ("kecamatan_id", r[0].get("id"));
 		this.sTPS.loadData ([]);
@@ -131,6 +140,9 @@ function JxHasilPemilu_DPR ()
 
 	this.cbKelurahanOnSelect = function (cb, r, e)
 	{
+		this.cbTPS.reset ();
+		this.cbSaksi.reset ();
+
 		this.sTPS.clearFilter (true);
 		this.sTPS.filter ("kelurahan_id", r[0].get("id"));
 		this.sSaksi.loadData ([]);
@@ -138,6 +150,8 @@ function JxHasilPemilu_DPR ()
 
 	this.cbTpsOnSelect = function (cb, r, e)
 	{
+		this.cbSaksi.reset ();
+
 		this.sSaksi.clearFilter (true);
 		this.sSaksi.filter ("tps_id", r[0].get("id"));
 	};
@@ -173,8 +187,8 @@ function JxHasilPemilu_DPR ()
 		,	this.cbSaksi
 		]
 	,	buttons	:
-		[	"->"
-		,	this.bReload
+		[
+			this.bReload
 		,	"->"
 		,	this.bSetDefault
 		]
@@ -187,18 +201,16 @@ function JxHasilPemilu_DPR ()
 	,	groupField	:"partai_nama"
 	,	fields		:
 		[
-			"caleg_id"
-		,	"partai_id"
-		,	"partai_nama"
-		,	"dapil_id"
-		,	"caleg_no_urut"
+			"partai_nama"
 		,	"caleg_nama"
 		,	"hasil"
+		,	"persentase"
 		]
 	});
 
 	this.grid	= Ext.create ("Ext.grid.Panel", {
 		store	:this.sHasil
+	,	stateful:false
 	,	region	:"east"
 	,	width	:"30%"
 	,	split	:true
@@ -212,7 +224,7 @@ function JxHasilPemilu_DPR ()
 		]
 	,	features:
 		[{
-			ftype			:"grouping"
+			ftype			:"groupingsummary"
 		,	hideGroupHeader	:true
 		}]
 	,	columns	:
@@ -221,9 +233,6 @@ function JxHasilPemilu_DPR ()
 		,	dataIndex	:"partai_nama"
 		,	width		:300
 		,	hidden		:true
-		},{
-			header		:"No. Urut"
-		,	dataIndex	:"caleg_no_urut"
 		},{
 			header		:"Nama"
 		,	dataIndex	:"caleg_nama"

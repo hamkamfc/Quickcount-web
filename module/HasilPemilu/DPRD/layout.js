@@ -8,7 +8,7 @@ function JxHasilPemilu_DPRD ()
 {
 	this.id		= "HasilPemilu_DPRD";
 	this.dir	= Jx.generateModDir(this.id);
-	this.onload = false;
+	this.onload	= true;
 
 	this.sDapil		= Ext.create ("Jx.StorePaging", {
 		url			:Jx.generateModDir ("HasilPemilu_DPRD_Wilayah_Dapil")
@@ -114,6 +114,11 @@ function JxHasilPemilu_DPRD ()
 
 	this.cbDapilOnSelect = function (cb, r, e)
 	{
+		this.cbKecamatan.reset();
+		this.cbKelurahan.reset();
+		this.cbTPS.reset ();
+		this.cbSaksi.reset ();
+
 		this.sKecamatan.clearFilter (true);
 		this.sKecamatan.filter ("dapil_id", r[0].get("id"));
 		this.sKelurahan.loadData ([]);
@@ -123,6 +128,10 @@ function JxHasilPemilu_DPRD ()
 
 	this.cbKecamatanOnSelect = function (cb, r, e)
 	{
+		this.cbKelurahan.reset();
+		this.cbTPS.reset ();
+		this.cbSaksi.reset ();
+
 		this.sKelurahan.clearFilter (true);
 		this.sKelurahan.filter ("kecamatan_id", r[0].get("id"));
 		this.sTPS.loadData ([]);
@@ -131,6 +140,9 @@ function JxHasilPemilu_DPRD ()
 
 	this.cbKelurahanOnSelect = function (cb, r, e)
 	{
+		this.cbTPS.reset ();
+		this.cbSaksi.reset ();
+
 		this.sTPS.clearFilter (true);
 		this.sTPS.filter ("kelurahan_id", r[0].get("id"));
 		this.sSaksi.loadData ([]);
@@ -138,8 +150,10 @@ function JxHasilPemilu_DPRD ()
 
 	this.cbTpsOnSelect = function (cb, r, e)
 	{
+		this.cbSaksi.reset ();
+
 		this.sSaksi.clearFilter (true);
-		this.sSaksi.filter ("no_tps", r[0].get("no"));
+		this.sSaksi.filter ("tps_id", r[0].get("id"));
 	};
 
 	this.bReload	= Ext.create ("Ext.button.Button", {
@@ -162,7 +176,7 @@ function JxHasilPemilu_DPRD ()
 	,	items	:
 		[{
 			xtype	:"numberfield"
-		,	value	:2
+		,	value	:1
 		,	name	:"type"
 		,	hidden	:true
 		}
@@ -173,8 +187,8 @@ function JxHasilPemilu_DPRD ()
 		,	this.cbSaksi
 		]
 	,	buttons	:
-		[	"->"
-		,	this.bReload
+		[
+			this.bReload
 		,	"->"
 		,	this.bSetDefault
 		]
@@ -187,22 +201,20 @@ function JxHasilPemilu_DPRD ()
 	,	groupField	:"partai_nama"
 	,	fields		:
 		[
-			"caleg_id"
-		,	"partai_id"
-		,	"partai_nama"
-		,	"dapil_id"
-		,	"caleg_no_urut"
+			"partai_nama"
 		,	"caleg_nama"
 		,	"hasil"
+		,	"persentase"
 		]
 	});
 
 	this.grid	= Ext.create ("Ext.grid.Panel", {
 		store	:this.sHasil
+	,	stateful:false
 	,	region	:"east"
-	,	width	:"40%"
+	,	width	:"30%"
 	,	split	:true
-	,	title	:"Hasil Pemilu"
+	,	title	:"Raw Data (Dari Semua Saksi)"
 	,	selType	:"cellmodel"
     ,	plugins	:
 		[
@@ -212,7 +224,7 @@ function JxHasilPemilu_DPRD ()
 		]
 	,	features:
 		[{
-			ftype			:"grouping"
+			ftype			:"groupingsummary"
 		,	hideGroupHeader	:true
 		}]
 	,	columns	:
@@ -221,9 +233,6 @@ function JxHasilPemilu_DPRD ()
 		,	dataIndex	:"partai_nama"
 		,	width		:300
 		,	hidden		:true
-		},{
-			header		:"No. Urut"
-		,	dataIndex	:"caleg_no_urut"
 		},{
 			header		:"Nama"
 		,	dataIndex	:"caleg_nama"
@@ -369,6 +378,7 @@ function JxHasilPemilu_DPRD ()
 			this.sRekap.add (o);
 			this.formRekap.loadRecord (o);
 		}
+
 		this.onload = false;
 	};
 
@@ -386,10 +396,14 @@ function JxHasilPemilu_DPRD ()
 				mod		:"dprd"
 			}
 		});
-	}
+	};
 
 	this.updateRekap = function (ed, newv, oldv)
 	{
+		if (this.onload) {
+			return;
+		}
+
 		this.formRekap.submit ({
 			url		:this.sRekap.url +"/update.php"
 		,	params	:{

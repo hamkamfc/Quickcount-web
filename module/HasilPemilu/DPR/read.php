@@ -16,6 +16,9 @@ try {
 	$kelurahan_id	= 0;
 	$tps_id			= 0;
 	$kode_saksi		= '';
+	$table_hasil	= "hasil_dpr";
+	$table_caleg	= "caleg_dpr";
+	$qwhere			= "";
 
 	if (count($filter) > 0) {
 		for ($i = 0; $i < count($filter); $i++) {
@@ -32,8 +35,6 @@ try {
 			}
 		}
 	}
-
-	$qwhere = "";
 
 	if ($dapil_id !== 0 && $dapil_id !== null) {
 		$qwhere .=" and dapil_id = ". $dapil_id;
@@ -52,34 +53,37 @@ try {
 	}
 
 	// Get data
-	$q	="
-select	A.id		as caleg_id
-,		A.partai_id
-,		(	select	B.nama
-			from	partai	B
-			where	B.id	= A.partai_id
-		)			as partai_nama
-,		A.dapil_id
-,		A.no_urut	as caleg_no_urut
-,		A.nama		as caleg_nama
-,		ifnull((
-			select	sum(C.hasil)
-			from	hasil_dpr	C
-			where	C.caleg_id	= A.id
-			and		C.dapil_id	= A.dapil_id
-			and		C.partai_id	= A.partai_id
-			". $qwhere ."
-		), 0)		as hasil
-from	caleg_dpr	A
-where	1 = 1 ";
-
-	if ($dapil_id !== null && $dapil_id > 0) {
-		$q .= " and A.dapil_id	= ". $dapil_id;
-	}
-
-$q .=
+	$q=
 "
-order by A.partai_id, A.dapil_id, A.no_urut
+select	X.partai_nama
+,		X.caleg_nama
+,		X.hasil
+,		round(((X.hasil / Y.v) * 100), 2) as persentase
+from (
+select	HD.partai_id
+,		CD.caleg_id
+,		P.nama					as partai_nama
+,		C.nama					as caleg_nama
+,		ifnull(sum(hasil),0)	as hasil
+from	". $table_hasil ."	HD
+,		". $table_caleg ."	CD
+,		caleg		C
+,		partai		P
+where	1				= 1
+and		HD.caleg_id		= CD.id
+and		CD.caleg_id		= C.id
+and		HD.partai_id	= P.id
+". $qwhere ."
+group by HD.partai_id, CD.caleg_id
+order by HD.partai_id, CD.caleg_id
+) X
+, (
+	select	ifnull(sum(HD.hasil),0)	as v
+	from	". $table_hasil ."		HD
+	where	1						= 1
+	". $qwhere ."
+) Y
+order by X.partai_id
 ";
 
 	$ps = Jaring::$_db->prepare ($q);
