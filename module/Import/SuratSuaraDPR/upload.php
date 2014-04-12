@@ -130,46 +130,6 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 	}
 }
 
-//$q = " select 1 from imported where type = 3 and filename = ? ";
-//$ps = Jaring::$_db->prepare ($q);
-//$ps->bindValue (1, $fileName);
-//$ps->execute ();
-//$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
-//$is_exist = count ($rs);
-//
-//// file is already uploaded before, update data on database
-//if ($is_exist > 0) {
-//	$q	=" update	rekap_suara_dpr"
-//		." set		jumlah		= ? "
-//		." ,		rusak		= ? "
-//		." ,		sisa		= ? "
-//		." ,		sah			= ? "
-//		." ,		tidak_sah	= ? "
-//		." where	dapil_id		= ? "
-//		." and		kecamatan_id	= ? "
-//		." and		kelurahan_id	= ? "
-//		." and		tps_id			= ? "
-//		." and		kode_saksi		= ? ";
-//
-//	$ps = Jaring::$_db->prepare ($q);
-//
-//	foreach ($data as $in) {
-//		$i = 1;
-//		$ps->bindValue ($i++, $in[5], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[6], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[7], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[8], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[9], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[0], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[1], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[2], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[3], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[4], PDO::PARAM_STR);
-//		$ps->execute ();
-//	}
-//
-//// insert new data
-//} else {
 	$q	="	delete	from rekap_suara_dpr "
 		."	where	dapil_id		= ?"
 		."	and		kecamatan_id	= ?"
@@ -210,7 +170,6 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 	foreach ($data as $in) {
 		$ps->execute ($in);
 	}
-//}
 
 $q = " insert into imported (type, filename) values ( 3 , ? )";
 $ps = Jaring::$_db->prepare ($q);
@@ -219,9 +178,4 @@ $ps->execute ();
 
 $r["success"] = true;
 
-// open and update
-
 require_once "../../json_end.php";
-
-// Return Success JSON-RPC response
-//die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');

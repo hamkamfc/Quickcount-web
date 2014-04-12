@@ -122,38 +122,39 @@ if (!$chunks || $chunk == $chunks - 1) {
 	rename("{$filePath}.part", $filePath);
 }
 
+$table = "hasil_dpr";
 $data = [];
+$c		= 0;
 
 if (($handle = fopen($filePath, "r")) !== FALSE) {
 	while (($r = fgetcsv($handle, 0, ";")) !== FALSE) {
 		$data[] = $r;
+		$c++;
+
+		if ($c === 1000) {
+			doInsert ($data);
+			$data	= [];
+			$c		= 0;
+		}
 	}
+	doInsert ($data);
 }
 
-// insert to log
-//$q = " select 1 from imported where type = 1 and filename = ? ";
-//$ps = Jaring::$_db->prepare ($q);
-//$ps->bindValue (1, $fileName);
-//$ps->execute ();
-//$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
-//$is_exist = count ($rs);
-//
-//// file is already uploaded before, update data on database
-//if ($is_exist > 0) {
-//	$q = " update hasil_dpr set hasil = ? where caleg_id = ? and partai_id = ? ";
-//	$ps = Jaring::$_db->prepare ($q);
-//
-//	foreach ($data as $in) {
-//		$i = 1;
-//		$ps->bindValue ($i++, $in[7], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[5], PDO::PARAM_INT);
-//		$ps->bindValue ($i++, $in[6], PDO::PARAM_INT);
-//		$ps->execute ();
-//	}
-//
-//// insert new data
-//} else {
-	$q	="	delete	from hasil_dpr"
+
+$q = " insert into imported (type, filename) values ( 1 , ? )";
+$ps = Jaring::$_db->prepare ($q);
+$ps->bindValue (1, $fileName, PDO::PARAM_STR);
+$ps->execute ();
+
+$r["success"] = true;
+
+require_once "../../json_end.php";
+
+function doInsert ($data)
+{
+	global $table;
+
+	$q	="	delete	from ". $table
 		."	where	dapil_id		= ?"
 		."	and		kecamatan_id	= ?"
 		."	and		kelurahan_id	= ?"
@@ -161,6 +162,8 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 		."	and		kode_saksi		= ?"
 		."	and		partai_id		= ?"
 		."	and		caleg_id		= ?";
+
+	Jaring::$_db->beginTransaction ();
 
 	$ps = Jaring::$_db->prepare ($q);
 
@@ -177,28 +180,42 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 	}
 
 	$ps->closeCursor ();
+	$ps = null;
 
-	$q	=" insert into hasil_dpr (dapil_id, kecamatan_id, kelurahan_id, tps_id, kode_saksi, caleg_id, partai_id, hasil"
-		.") values ("
-		." ?, ?, ?, ?, ?, ?, ?, ?"
-		.")";
-	$ps = Jaring::$_db->prepare ($q);
+	Jaring::$_db->commit ();
+	Jaring::$_db->beginTransaction ();
 
+	$q	=
+"
+	insert into ". $table ." (
+	  dapil_id
+	, kecamatan_id
+	, kelurahan_id
+	, tps_id
+	, kode_saksi
+	, caleg_id
+	, partai_id
+	, hasil
+	) values
+";
+
+	$qv = " ( ?, ?, ?, ?, ?, ?, ?, ? ) ";
+	$bv = array ();
+
+	$first = true;
 	foreach ($data as $in) {
-		$ps->execute ($in);
+		if ($first) {
+			$q .= $qv;
+			$first = false;
+		} else {
+			$q .= ", ". $qv;
+		}
+		$bv = array_merge ($bv, $in);
 	}
-//}
 
-$q = " insert into imported (type, filename) values ( 1 , ? )";
-$ps = Jaring::$_db->prepare ($q);
-$ps->bindValue (1, $fileName, PDO::PARAM_STR);
-$ps->execute ();
+	$ps2 = Jaring::$_db->prepare ($q);
+	$ps2->execute ($bv);
+	$ps2->closeCursor ();
 
-$r["success"] = true;
-
-// open and update
-
-require_once "../../json_end.php";
-
-// Return Success JSON-RPC response
-//die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
+	Jaring::$_db->commit ();
+}
