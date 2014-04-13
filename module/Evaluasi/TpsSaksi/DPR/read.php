@@ -11,37 +11,114 @@ require_once "../../../json_begin.php";
 try {
 	$query			= $_GET["query"];
 	$showEmptyOnly	= $_GET["showEmptyOnly"];
-
-	$q_sub	="
-select	A.nama		as dapil_nama
-,		B.nama		as kecamatan_nama
-,		C.nama		as kelurahan_nama
-,		D.no		as tps_no
-,		D.alamat	as tps_alamat
-,		(
-			select	E.kode_saksi
-			from	saksi_default	E
-			where	E.tps_id		= D.id
-			and		E.type			= 1
-		)			as kode_saksi
-from	dapil		A
-,		kecamatan	B
-,		kelurahan	C
-,		tps			D
-where	A.id		= B.dapil_id
-and		B.id		= C.kecamatan_id
-and		C.id		= D.kelurahan_id
-and		A.nama		like ?
-and		B.nama		like ?
-and		C.nama		like ?
-and		D.alamat	like ?
-order by A.id, B.id, C.id, D.id
-";
+	$table_hasil	= "hasil_dpr";
 
 	if ($showEmptyOnly === "true") {
-		$q =" select count(X.kode_saksi) as total from ( ". $q_sub ." ) X where X.kode_saksi is null ";
+		$s = 0;
 	} else {
-		$q =" select count(X.kode_saksi) as total from ( ". $q_sub ." ) X where X.kode_saksi is not null ";
+		$s = 1;
+	}
+
+	$q_0	=
+"
+select A.*
+from (
+	select distinct
+	  S.dapil_id
+	, S.kecamatan_id
+	, S.kelurahan_id
+	, S.tps_id
+	, (
+		select	kode_saksi
+		from	". $table_hasil. "
+		where	tps_id = S.tps_id
+		and		status = 0
+		limit	0,1
+	) as kode_saksi
+	, S.status
+	from	". $table_hasil. " S
+	where	status	= 0
+) A
+where A.tps_id not in (
+	select B.tps_id
+	from (
+		select distinct
+		  S.dapil_id
+		, S.kecamatan_id
+		, S.kelurahan_id
+		, S.tps_id
+		, (
+			select	kode_saksi
+			from	". $table_hasil. "
+			where	tps_id = S.tps_id
+			and		status = 1
+			limit	0,1
+		) as kode_saksi
+		from	". $table_hasil. " S
+		where	status	= 1
+	) B
+)
+";
+
+	$q_1	=
+"
+	select distinct
+	  S.dapil_id
+	, S.kecamatan_id
+	, S.kelurahan_id
+	, S.tps_id
+	, (
+		select	kode_saksi
+		from	". $table_hasil. "
+		where	tps_id = S.tps_id
+		and		status = 1
+		limit	0,1
+	) as kode_saksi
+	, S.status
+	from	". $table_hasil. " S
+	where	status	= 1
+";
+
+	$q_sub	=
+"
+select	dapil.nama		as dapil_nama
+,		kecamatan.nama	as kecamatan_nama
+,		kelurahan.nama	as kelurahan_nama
+,		tps.no			as tps_no
+,		tps.alamat		as tps_alamat
+,		XX.kode_saksi
+from (
+";
+
+	if ($s === 1) {
+		$q_sub .= $q_1;
+	} else {
+		$q_sub .= $q_0;
+	}
+
+	$q_sub .=
+"
+) XX
+, dapil
+, kecamatan
+, kelurahan
+, tps
+where	XX.dapil_id		= dapil.id
+and		XX.kecamatan_id	= kecamatan.id
+and		XX.kelurahan_id	= kelurahan.id
+and		XX.tps_id		= tps.id
+and		dapil.nama		like ?
+and		kecamatan.nama	like ?
+and		kelurahan.nama	like ?
+and		tps.alamat		like ?
+";
+
+
+
+	if ($showEmptyOnly === "true") {
+		$q =" select count(X.kode_saksi) as total from ( ". $q_sub ." ) X ";
+	} else {
+		$q =" select count(X.kode_saksi) as total from ( ". $q_sub ." ) X ";
 	}
 
 	$ps = Jaring::$_db->prepare ($q);
@@ -59,13 +136,7 @@ order by A.id, B.id, C.id, D.id
 	}
 
 	// Get data
-	if ($showEmptyOnly === "true") {
-		$q =" select X.* from ( ". $q_sub ." ) X where X.kode_saksi is null ";
-	} else {
-		$q =" select X.* from ( ". $q_sub ." ) X where X.kode_saksi is not null ";
-	}
-
-	$q .= " limit	". (int) $_GET["start"] .",". (int) $_GET["limit"];
+	$q = $q_sub ." limit	". (int) $_GET["start"] .",". (int) $_GET["limit"];
 
 	$ps = Jaring::$_db->prepare ($q);
 	$i	= 1;
@@ -84,6 +155,7 @@ order by A.id, B.id, C.id, D.id
 	);
 } catch (Exception $e) {
 	$r['data']	= $e->getMessage ();
+	$r['q'] = $q;
 }
 
 require_once "../../../json_end.php";
