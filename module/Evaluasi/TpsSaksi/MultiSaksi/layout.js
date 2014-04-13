@@ -11,6 +11,7 @@ function JxEvaluasi_TpsSaksi_MultiSaksi ()
 
 	this.store		= Ext.create ("Jx.StorePaging", {
 			url		:this.dir
+		,	singleApi:false
 		,	fields	:
 					[
 						"tps_no"

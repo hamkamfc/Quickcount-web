@@ -92,6 +92,7 @@ function JxTabulasi_Partai_DPRD ()
 
 	this.store	= Ext.create ("Jx.Store", {
 		url		:this.dir
+	,	singleApi:false
 	,	fields	:
 		[
 			"partai_nama"

@@ -92,6 +92,7 @@ function JxEvaluasi_SuratSuara_DPRD ()
 
 	this.store	= Ext.create ("Jx.Store", {
 		url		:this.dir
+	,	singleApi:false
 	,	fields	:
 		[
 			"tps_no"

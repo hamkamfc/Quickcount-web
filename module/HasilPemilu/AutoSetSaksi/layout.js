@@ -11,6 +11,7 @@ function JxHasilPemilu_AutoSetSaksi ()
 
 	this.store		= Ext.create ("Jx.Store", {
 			url		:this.dir
+		,	singleApi:false
 		,	fields	:
 					[
 						"tps_id"

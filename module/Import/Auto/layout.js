@@ -9,8 +9,10 @@ function JxImport_Auto ()
 	this.id		= "Import_Auto";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store	= Ext.create ("Jx.Store", {
-		fields	:
+	this.store		= Ext.create ("Jx.Store", {
+		singleApi	:true
+	,	url			:this.dir +"/process.php"
+	,	fields		:
 		[
 			"filename"
 		,	"_when"
