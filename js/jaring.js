@@ -91,6 +91,22 @@ Jx = {
 			this.display ("Error", format, "error", 4000);
 		}
 
+	,	confirmMsg	:function (msg, yesCallback, scope)
+		{
+			Ext.Msg.confirm (
+				"Confirmation"
+			,	msg
+			,	function (buttonId, text, me)
+				{
+					if (buttonId == "yes") {
+						if (yesCallback && typeof (yesCallback) === "function") {
+							yesCallback.call (scope);
+						}
+					}
+				}
+			);
+		}
+
 	,	confirm	:function (yesCallback, scope)
 		{
 			Ext.Msg.confirm (
