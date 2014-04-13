@@ -146,7 +146,8 @@ function JxTabulasi_Caleg_DPRD ()
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		title	:"Hasil Pemilu > DPRD"
+		itemId			:this.id
+	,	title	:"Hasil Pemilu > DPRD"
 	,	closable:true
 	,	layout	:"border"
 	,	items	:

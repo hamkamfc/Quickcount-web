@@ -116,7 +116,10 @@ function JxTabulasi_Partai_DPRD ()
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		layout	:"border"
+		itemId	:this.id
+	,	title	:"Hasil Pemilu > per Partai > DPRD"
+	,	closable:true
+	,	layout	:"border"
 	,	items	:
 		[
 			this.form

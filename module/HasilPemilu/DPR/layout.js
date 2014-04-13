@@ -313,6 +313,7 @@ function JxHasilPemilu_DPR ()
 
 	this.panel	= Ext.create ("Ext.container.Container", {
 		title	:"Raw Data > DPR"
+	,	itemId	:this.id
 	,	closable:true
 	,	layout	:"border"
 	,	items	:

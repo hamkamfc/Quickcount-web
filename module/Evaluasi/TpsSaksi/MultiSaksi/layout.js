@@ -23,7 +23,8 @@ function JxEvaluasi_TpsSaksi_MultiSaksi ()
 		});
 
 	this.panel				= Ext.create ("Jx.GridPaging", {
-			title			:"Daftar TPS dengan Saksi Lebih Dari Satu"
+			itemId			:this.id
+		,	title			:"Daftar TPS dengan Saksi Lebih Dari Satu"
 		,	buttonBarList	:["refresh"]
 		,	closable		:true
 		,	store			:this.store

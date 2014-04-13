@@ -90,7 +90,8 @@ function JxImport_SuratSuaraDPR ()
 
 	this.panel	= Ext.create ("Ext.container.Container",
 		{
-			title	:"Surat Suara > DPR"
+			itemId	:this.id
+		,	title	:"Surat Suara > DPR"
 		,	closable:true
 		,	layout	:"border"
 		,	items	:

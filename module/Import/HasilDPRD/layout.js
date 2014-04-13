@@ -90,7 +90,8 @@ function JxImport_HasilDPRD ()
 
 	this.panel	= Ext.create ("Ext.container.Container",
 		{
-			title		:"Import > DPRD"
+			itemId		:this.id
+		,	title		:"Import > DPRD"
 		,	closable	:true
 		,	layout		:"border"
 		,	items		:

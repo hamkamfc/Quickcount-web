@@ -83,6 +83,7 @@ order by HD.partai_id, CD.caleg_id
 	where	1						= 1
 	". $qwhere ."
 ) Y
+order by X.partai_id
 ";
 
 	$ps = Jaring::$_db->prepare ($q);

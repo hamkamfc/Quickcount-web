@@ -147,7 +147,8 @@ function JxTabulasi_Caleg_DPR ()
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		title	:"Hasil Pemilu > DPR"
+		itemId			:this.id
+	,	title	:"Hasil Pemilu > DPR"
 	,	closable:true
 	,	layout	:"border"
 	,	items	:

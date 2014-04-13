@@ -121,7 +121,8 @@ function JxTabulasi_Partai_DPR ()
 	});
 
 	this.panel	= Ext.create ("Ext.container.Container", {
-		title	:"Hasil Pemilu > per Partai DPR"
+		itemId			:this.id
+	,	title	:"Hasil Pemilu > per Partai DPR"
 	,	closable:true
 	,	layout	:"border"
 	,	items	:

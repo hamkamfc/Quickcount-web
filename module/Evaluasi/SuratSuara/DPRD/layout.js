@@ -141,6 +141,7 @@ function JxEvaluasi_SuratSuara_DPRD ()
 
 	this.panel	= Ext.create ("Ext.container.Container", {
 		title	:"Validasi > Surat Suara > DPRD"
+	,	itemId	:this.id
 	,	closable:true
 	,	layout	:"border"
 	,	items	:

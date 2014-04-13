@@ -22,7 +22,8 @@ function JxImport_Auto ()
 	});
 
 	this.panel			= Ext.create ("Jx.GridPaging", {
-		title			:"Auto Import"
+		itemId			:this.id
+	,	title			:"Auto Import"
 	,	store			:this.store
 	,	buttonBarList	:["refresh"]
 	,	addButtons		:

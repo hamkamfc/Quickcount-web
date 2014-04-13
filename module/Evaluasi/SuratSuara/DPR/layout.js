@@ -142,6 +142,7 @@ function JxEvaluasi_SuratSuara_DPR ()
 	this.panel	= Ext.create ("Ext.container.Container",
 	{
 		title	:"Validasi > Surat Suara > DPR"
+	,	itemId	:this.id
 	,	closable:true
 	,	layout	:"border"
 	,	items	:
