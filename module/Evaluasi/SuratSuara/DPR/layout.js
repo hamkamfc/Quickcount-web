@@ -6,7 +6,7 @@
 
 function JxEvaluasi_SuratSuara_DPR ()
 {
-	this.id		= "Evaluasi_SuratSuara_DPR"
+	this.id		= "Evaluasi_SuratSuara_DPR";
 	this.dir	= Jx.generateModDir (this.id);
 
 	this.sDapil		= Ext.create ("Jx.StorePaging", {
@@ -90,7 +90,7 @@ function JxEvaluasi_SuratSuara_DPR ()
 		]
 	});
 
-	this.store	= Ext.create ("Jx.Store", {
+	this.store	= Ext.create ("Jx.StorePaging", {
 		url		:this.dir
 	,	singleApi:false
 	,	fields	:
@@ -105,10 +105,27 @@ function JxEvaluasi_SuratSuara_DPR ()
 		]
 	});
 
-	this.grid	= Ext.create ("Ext.grid.Panel", {
-		title	:"Surat Suara"
-	,	region	:"center"
-	,	store	:this.store
+	this.grid			= Ext.create ("Jx.GridPaging", {
+		title			:"Surat Suara"
+	,	region			:"center"
+	,	buttonBarList	:[]
+	,	store			:this.store
+	,	viewConfig		:
+		{
+			stripeRows		: false
+		,	getRowClass		: function (r)
+			{
+				var jml		= parseInt(r.get ("jumlah"));
+				var sisa	= parseInt(r.get ("sisa"));
+				var rusak	= parseInt(r.get ("rusak"));
+				var sah		= parseInt(r.get ("sah"));
+				var taksah	= parseInt(r.get ("tidak_sah"));
+
+				var x = sisa + rusak + sah + taksah;
+
+				return (jml !== x) ? 'rekap-suara-unmatch' : 'rekap-suara-match';
+			}
+		}
 	,	columns	:
 		[{
 			header		:"No. TPS"
@@ -177,10 +194,13 @@ function JxEvaluasi_SuratSuara_DPR ()
 
 	this.reloadGrid = function (b)
 	{
+		var p = this.store.getProxy ().extraParams;
+
 		this.store.getProxy ().extraParams = {
 			dapil_id		: this.cbDapil.getValue ()
 		,	kecamatan_id	: this.cbKecamatan.getValue ()
 		,	kelurahan_id	: this.cbKelurahan.getValue ()
+		,	query			: p.query
 		};
 
 		this.store.load ();

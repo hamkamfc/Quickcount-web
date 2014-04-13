@@ -7,3 +7,13 @@ Authors:
 .x-grid-row-summary {
 	background-color: #eaffeb;
 }
+
+.rekap-suara-match {
+	background-color	: #e2ffe2;
+	color				: #090;
+}
+
+.rekap-suara-unmatch {
+	background-color	: #ffe2e2;
+	color				: #900;
+}
