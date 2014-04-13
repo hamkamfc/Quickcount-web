@@ -239,10 +239,11 @@ function JxMain ()
 	this.footerId			= this.id +"Footer";
 	this.dir				= _g_module_dir + this.id;
 
-	this.store	= Ext.create ("Jx.Store", {
-			storeId	:this.menuStoreId
-		,	url		:_g_module_path +"menu"+ _g_ext
-		,	fields	:
+	this.store			= Ext.create ("Jx.Store", {
+			storeId		:this.menuStoreId
+		,	singleApi	:true
+		,	url			:_g_module_path +"menu"+ _g_ext
+		,	fields		:
 			[
 				"title"
 			,	"tbar"
@@ -251,6 +252,7 @@ function JxMain ()
 
 	this.storeHome	= Ext.create ("Jx.Store", {
 			storeId		:this.homeStoreId
+		,	singleApi	:true
 		,	url			:_g_module_path +"menuHome"+ _g_ext
 		,	fields		:
 			[
