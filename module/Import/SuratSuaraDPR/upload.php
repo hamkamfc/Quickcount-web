@@ -171,7 +171,7 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 		$ps->execute ($in);
 	}
 
-$q = " insert into imported (type, filename) values ( 3 , ? )";
+$q = " insert into imported (type, filename) values ( 3 , ? , 1 )";
 $ps = Jaring::$_db->prepare ($q);
 $ps->bindValue (1, $fileName, PDO::PARAM_STR);
 $ps->execute ();

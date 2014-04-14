@@ -28,7 +28,7 @@ function JxHasilPemilu_AutoSetSaksi ()
 			title			:"Raw Data > Auto Set Saksi"
 		,	itemId			:this.id
 		,	closable		:true
-		,	buttonBarList	:["refresh"]
+		,	buttonBarList	:[]
 		,	showSearchField	:false
 		,	addButtons		:
 				[

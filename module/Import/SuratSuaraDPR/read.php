@@ -25,7 +25,7 @@ try {
 		."	,	_when"
 		."	from	imported"
 		."	where	type = 3 and filename like ?"
-		."	order by filename"
+		."	order by _when desc"
 		."	limit ". (int) $_GET["start"] .",". (int) $_GET["limit"];
 
 	$ps = Jaring::$_db->prepare ($q);

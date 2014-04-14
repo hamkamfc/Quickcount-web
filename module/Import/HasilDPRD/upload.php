@@ -122,7 +122,7 @@ if (!$chunks || $chunk == $chunks - 1) {
 	rename("{$filePath}.part", $filePath);
 }
 
-$table	= "hasil_dpr";
+$table	= "hasil_dprd";
 $data	= [];
 $c		= 0;
 
@@ -141,7 +141,7 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 }
 
 
-$q = " insert into imported (type, filename) values ( 1 , ? )";
+$q = " insert into imported (type, filename, status) values ( 1 , ? , 1 )";
 $ps = Jaring::$_db->prepare ($q);
 $ps->bindValue (1, $fileName, PDO::PARAM_STR);
 $ps->execute ();
