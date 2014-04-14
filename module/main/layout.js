@@ -1,8 +1,7 @@
 /*
-	Copyright 2014 x10c-lab.com
+	Copyright 2014 Mhd Sulhan
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
-		- agus sugianto (agus@x10c-lab.com)
 */
 
 var main;
@@ -328,7 +327,7 @@ function JxMain ()
 			[{
 				id			:"app-footer"
 			,	xtype		:"box"
-			,	html		:"<a href='https://github.com/x10c/Jaring' target='_blank'>"+ _g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"+ new Date().getFullYear() +" - x10c-lab.com </a>"
+			,	html		:"<a href='https://github.com/x10c/Jaring' target='_blank'>"+ _g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"+ new Date().getFullYear() +" - Mhd Sulhan </a>"
 			,	flex		:1
 			}]
 		});
@@ -370,14 +369,7 @@ function JxMain ()
 			]
 		});
 
-	this.contentDashboard	= Ext.create ("Ext.panel.Panel", {
-			region		:"center"
-		,	margin		:"5 0 0 0"
-		,	padding		:"0 5 0 5"
-		,	layout		:"fit"
-		,	bodyCls		:"panel-background"
-		,	hidden		:true
-		});
+	this.contentDashboard	= new JxDashboard ();
 
 	// Main interface
 	this.main			= Ext.create ("Ext.container.Viewport", {
@@ -387,7 +379,7 @@ function JxMain ()
 			[
 				this.header
 			,	this.contentHome
-			,	this.contentDashboard
+			,	this.contentDashboard.panel
 			,	this.footer
 			]
 		});
