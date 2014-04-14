@@ -53,7 +53,7 @@
             <img src="<%= Jaring._path %>/images/loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>
 			<%= Jaring._title %>
 			-
-			<a href="http://www.x10c-lab.com">x10c-lab.com</a>
+			<a href="http://github.com/shuLhan">Mhd Sulhan (m.shulhan@gmail.com)</a>
             <br />
 			<span id="loading-msg">Loading application...</span>
         </div>
