@@ -37,19 +37,19 @@ try {
 	}
 
 	if ($dapil_id !== 0 && $dapil_id !== null) {
-		$qwhere .=" and dapil_id = ". $dapil_id;
+		$qwhere .=" and HD.dapil_id = ". $dapil_id;
 	}
 	if ($kecamatan_id !== 0 && $kecamatan_id !== null) {
-		$qwhere .=" and kecamatan_id = ". $kecamatan_id;
+		$qwhere .=" and HD.kecamatan_id = ". $kecamatan_id;
 	}
 	if ($kelurahan_id !== 0 && $kelurahan_id !== null) {
-		$qwhere .=" and kelurahan_id = ". $kelurahan_id;
+		$qwhere .=" and HD.kelurahan_id = ". $kelurahan_id;
 	}
 	if ($tps_id !== 0 && $tps_id !== null) {
-		$qwhere .=" and tps_id = ". $tps_id;
+		$qwhere .=" and HD.tps_id = ". $tps_id;
 	}
 	if ($kode_saksi !== '' && $kode_saksi !== null) {
-		$qwhere .=" and kode_saksi = '". $kode_saksi ."' ";
+		$qwhere .=" and HD.kode_saksi = '". $kode_saksi ."' ";
 	}
 
 	// Get data
