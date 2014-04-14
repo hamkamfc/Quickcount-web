@@ -25,9 +25,10 @@ function JxImport_Auto ()
 
 	this.panel			= Ext.create ("Jx.GridPaging", {
 		itemId			:this.id
+	,	closable		:true
 	,	title			:"Auto Import"
 	,	store			:this.store
-	,	buttonBarList	:["refresh"]
+	,	buttonBarList	:[]
 	,	addButtons		:
 		[
 			this.bProcess
@@ -54,6 +55,7 @@ function JxImport_Auto ()
 
 		Ext.Ajax.request ({
 			url		:this.dir +"/process.php"
+		,	timeout	:600000
 		,	failure	:function (response, opts)
 			{
 				Jx.msg.error ("Auto import failed!");
