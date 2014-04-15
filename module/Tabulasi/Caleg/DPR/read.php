@@ -17,16 +17,16 @@ try {
 	$table_caleg	= "caleg_dpr";
 	$qwhere			= "";
 
-	if ($dapil_id !== null && $dapil_id > 0) {
+	if (! empty ($dapil_id)) {
 		$qwhere .= " and HD.dapil_id = ". $dapil_id;
 	}
-	if ($kecamatan_id !== null && $kecamatan_id > 0) {
+	if (! empty ($kecamatan_id)) {
 		$qwhere .= " and HD.kecamatan_id = ". $kecamatan_id;
 	}
-	if ($kelurahan_id !== null && $kelurahan_id > 0) {
+	if (! empty ($kelurahan_id)) {
 		$qwhere .= " and HD.kelurahan_id = ". $kelurahan_id;
 	}
-	if ($tps_id !== null && $tps_id > 0) {
+	if (! empty ($tps_id)) {
 		$qwhere .= " and HD.tps_id = ". $tps_id;
 	}
 

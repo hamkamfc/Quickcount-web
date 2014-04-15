@@ -194,6 +194,7 @@ function JxTabulasi_Caleg_DPR ()
 		,	"sah"
 		,	"tidak_sah"
 		,	"jumlah_tps"
+		,	"total_jumlah_tps"
 		]
 	});
 
@@ -226,6 +227,9 @@ function JxTabulasi_Caleg_DPR ()
 		,	name		:"tidak_sah"
 		},{
 			fieldLabel	:"Total Jumlah TPS"
+		,	name		:"total_jumlah_tps"
+		},{
+			fieldLabel	:"Jumlah TPS Yang Masuk"
 		,	name		:"jumlah_tps"
 		}]
 	});
@@ -338,6 +342,7 @@ function JxTabulasi_Caleg_DPR ()
 			,	sah				: 0
 			,	tidak_sah		: 0
 			,	jumlah_tps		: 0
+			,	total_jumlah_tps: 0
 			};
 
 			this.sRekap.add (o);

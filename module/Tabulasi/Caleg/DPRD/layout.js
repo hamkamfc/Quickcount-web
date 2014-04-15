@@ -194,6 +194,7 @@ function JxTabulasi_Caleg_DPRD ()
 		,	"sah"
 		,	"tidak_sah"
 		,	"jumlah_tps"
+		,	"total_jumlah_tps"
 		]
 	});
 
@@ -226,6 +227,9 @@ function JxTabulasi_Caleg_DPRD ()
 		,	name		:"tidak_sah"
 		},{
 			fieldLabel	:"Total Jumlah TPS"
+		,	name		:"total_jumlah_tps"
+		},{
+			fieldLabel	:"Jumlah TPS Yang Masuk"
 		,	name		:"jumlah_tps"
 		}]
 	});
@@ -338,10 +342,11 @@ function JxTabulasi_Caleg_DPRD ()
 			,	sah				: 0
 			,	tidak_sah		: 0
 			,	jumlah_tps		: 0
+			,	total_jumlah_tps: 0
 			};
 
 			this.sRekap.add (o);
-			this.formRekap.loadRecord (this.sRekap.getAt (0));
+			this.formRekap.loadRecord (this.sRekap.getAt(0));
 		}
 
 		this.onload = false;
@@ -361,4 +366,4 @@ function JxTabulasi_Caleg_DPRD ()
 	this.sRekap.on("load", this.sRekapLoaded, this);
 }
 
-var Tabulasi_Caleg_DPRD = new JxTabulasi_Caleg_DPRD ();
+var Tabulasi_Caleg_DPRD = new JxTabulasi_Caleg_DPRD();

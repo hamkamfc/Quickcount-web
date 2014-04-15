@@ -14,23 +14,28 @@ try {
 	$kelurahan_id	= $_GET["kelurahan_id"];
 	$tps_id			= $_GET["tps_id"];
 	$qwhere			= "";
+	$qwhere_tps		= "";
 	$qgroup			= "";
 	$table_hasil	= "rekap_suara_dprd";
 
 	if (! empty ($dapil_id)) {
 		$qwhere .=" and dapil_id = ". $dapil_id;
+		$qwhere_tps	.=" and dapil.id = ". $dapil_id;
 		$qgroup .=" dapil_id ";
 	}
 	if (! empty ($kecamatan_id)) {
 		$qwhere .=" and kecamatan_id = ". $kecamatan_id;
+		$qwhere_tps	.=" and kecamatan.id = ". $kecamatan_id;
 		$qgroup .=" , kecamatan_id ";
 	}
 	if (! empty ($kelurahan_id)) {
 		$qwhere .=" and kelurahan_id = ". $kelurahan_id;
+		$qwhere_tps	.=" and tps.kelurahan_id = ". $kelurahan_id;
 		$qgroup .=" , kelurahan_id ";
 	}
 	if (! empty ($tps_id)) {
 		$qwhere .=" and tps_id = ". $tps_id;
+		$qwhere_tps .=" and tps.id = ". $tps_id;
 		$qgroup .=" , tps_id ";
 	}
 
@@ -49,7 +54,18 @@ try {
 							where	status = 1
 							". $qwhere ."
 						) UTPS
-					)							as jumlah_tps
+					) as jumlah_tps
+			,		(
+						select	count(tps.id)
+						from	tps
+						,		kelurahan
+						,		kecamatan
+						,		dapil
+						where	tps.kelurahan_id		= kelurahan.id
+						and		kelurahan.kecamatan_id	= kecamatan.id
+						and		kecamatan.dapil_id		= dapil.id
+						". $qwhere_tps ."
+					) as total_jumlah_tps
 			from	". $table_hasil ."
 			where	status = 1
 		". $qwhere;
@@ -68,7 +84,6 @@ try {
 		'success'	=> true
 	,	'data'		=> $rs
 	,	'total'		=> $t
-	,	'q'			=> $q
 	);
 } catch (Exception $e) {
 	$r['data']	= $e->getMessage ();
