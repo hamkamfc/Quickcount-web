@@ -145,10 +145,6 @@ $ps = Jaring::$_db->prepare ($q);
 $ps->bindValue (1, $fileName, PDO::PARAM_STR);
 $ps->execute ();
 
-$r["success"] = true;
-
-require_once "../../json_end.php";
-
 function doInsert ($data)
 {
 	global $table;
@@ -162,27 +158,30 @@ function doInsert ($data)
 		."	and		partai_id		= ?"
 		."	and		caleg_id		= ?";
 
-	Jaring::$_db->beginTransaction ();
+	try {
+		Jaring::$_db->beginTransaction ();
 
-	$ps = Jaring::$_db->prepare ($q);
+		$ps = Jaring::$_db->prepare ($q);
 
-	foreach ($data as $in) {
-		$i = 1;
-		$ps->bindValue ($i++, $in[0], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[1], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[2], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[3], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[4], PDO::PARAM_STR);
-		$ps->bindValue ($i++, $in[5], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[6], PDO::PARAM_INT);
-		$ps->execute ();
+		foreach ($data as $in) {
+			$i = 1;
+			$ps->bindValue ($i++, $in[0], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[1], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[2], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[3], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[4], PDO::PARAM_STR);
+			$ps->bindValue ($i++, $in[5], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[6], PDO::PARAM_INT);
+			$ps->execute ();
+		}
+
+		Jaring::$_db->commit ();
+	} catch (Exception $e) {
+		Jaring::$_db->rollback ();
 	}
 
 	$ps->closeCursor ();
 	$ps = null;
-
-	Jaring::$_db->commit ();
-	Jaring::$_db->beginTransaction ();
 
 	$q	=
 "
@@ -212,9 +211,19 @@ function doInsert ($data)
 		$bv = array_merge ($bv, $in);
 	}
 
-	$ps2 = Jaring::$_db->prepare ($q);
-	$ps2->execute ($bv);
-	$ps2->closeCursor ();
+	try {
+		Jaring::$_db->beginTransaction ();
 
-	Jaring::$_db->commit ();
+		$ps2 = Jaring::$_db->prepare ($q);
+		$ps2->execute ($bv);
+		$ps2->closeCursor ();
+
+		Jaring::$_db->commit ();
+	} catch (Exception $e) {
+		Jaring::$_db->rollback ();
+	}
 }
+
+$r["success"] = true;
+
+require_once "../../json_end.php";
