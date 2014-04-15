@@ -26,8 +26,7 @@ function JxImport_SuratSuaraDPRD ()
 
 	this.gridUpload	= Ext.create ("Ext.grid.Panel",
 	{
-		id			:"upload-panel"
-	,	region		:"east"
+		region		:"east"
 	,	split		:true
 	,	width		:400
 	,	store		:this.storeImport
@@ -69,8 +68,7 @@ function JxImport_SuratSuaraDPRD ()
 	});
 
 	this.grid			= Ext.create ("Jx.GridPaging", {
-		id				:this.id
-	,	store			:this.store
+		store			:this.store
 	,	buttonBarList	:["refresh"]
 	,	region			:"center"
 	,	addButtons		:
@@ -90,7 +88,7 @@ function JxImport_SuratSuaraDPRD ()
 
 	this.panel	= Ext.create ("Ext.container.Container",
 		{
-			itemId	:this.id
+			id		:this.id
 		,	title	:"Surat Suara > DPRD"
 		,	closable:true
 		,	layout	:"border"

@@ -341,7 +341,7 @@ function JxTabulasi_Caleg_DPRD ()
 			};
 
 			this.sRekap.add (o);
-			this.formRekap.loadRecord (o);
+			this.formRekap.loadRecord (this.sRekap.getAt (0));
 		}
 
 		this.onload = false;

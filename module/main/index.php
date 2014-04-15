@@ -47,7 +47,7 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/plupload/plupload.full.min.js"></script>
 
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
-	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>dashboard.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>../Dashboard/layout.js"></script>
 </head>
 <body>
     <div id="loading-mask" style=""></div>

@@ -130,6 +130,7 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 	}
 }
 
+if (count ($data) > 0) {
 	$q	="	delete	from rekap_suara_dpr "
 		."	where	dapil_id		= ?"
 		."	and		kecamatan_id	= ?"
@@ -170,8 +171,9 @@ if (($handle = fopen($filePath, "r")) !== FALSE) {
 	foreach ($data as $in) {
 		$ps->execute ($in);
 	}
+}
 
-$q = " insert into imported (type, filename) values ( 3 , ? , 1 )";
+$q = " insert into imported (type, filename, status) values ( 3 , ? , 1 )";
 $ps = Jaring::$_db->prepare ($q);
 $ps->bindValue (1, $fileName, PDO::PARAM_STR);
 $ps->execute ();

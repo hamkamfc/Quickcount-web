@@ -26,7 +26,8 @@ function JxImport_HasilDPR ()
 
 	this.gridUpload	= Ext.create ("Ext.grid.Panel",
 	{
-		region		:"east"
+		id			:this.id +"Upload"
+	,	region		:"east"
 	,	split		:true
 	,	width		:400
 	,	store		:this.storeImport
@@ -34,7 +35,7 @@ function JxImport_HasilDPR ()
 		[{
 			xtype		:"button"
 		,	text		:"Add"
-		,	id			:"import"
+		,	id			:"import_dpr"
 		,	iconCls		:"add"
 		},"->",{
 			xtype		:"button"
@@ -88,7 +89,7 @@ function JxImport_HasilDPR ()
 
 	this.panel	= Ext.create ("Ext.container.Container",
 		{
-			itemId		:this.id
+			id			:this.id
 		,	title		:"Import > DPR"
 		,	closable	:true
 		,	layout		:"border"
@@ -108,7 +109,7 @@ function JxImport_HasilDPR ()
 		, function (com, width, height, e)
 		{
 			this.uploader = new plupload.Uploader ({
-					browse_button	:"import"
+					browse_button	:"import_dpr"
 				,	url				: "../../Import/HasilDPR/upload.php"
 				});
 

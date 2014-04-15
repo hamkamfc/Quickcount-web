@@ -6,60 +6,63 @@
  *   - mhd.sulhan (m.shulhan@gmail.com)
  */
 
-require_once "../../json_begin.php";
+require_once "../../../json_begin.php";
 
 try {
 	$dapil_id		= $_GET["dapil_id"];
 	$kecamatan_id	= $_GET["kecamatan_id"];
 	$kelurahan_id	= $_GET["kelurahan_id"];
 	$tps_id			= $_GET["tps_id"];
+	$table_hasil	= "hasil_dprd";
+	$table_caleg	= "caleg_dprd";
 	$qwhere			= "";
-	$qgroup			= "";
-	$table_hasil	= "rekap_suara_dprd";
 
-	if (! empty ($dapil_id)) {
-		$qwhere .=" and dapil_id = ". $dapil_id;
-		$qgroup .=" dapil_id ";
+	if ($dapil_id !== null && $dapil_id > 0) {
+		$qwhere .= " and HD.dapil_id = ". $dapil_id;
 	}
-	if (! empty ($kecamatan_id)) {
-		$qwhere .=" and kecamatan_id = ". $kecamatan_id;
-		$qgroup .=" , kecamatan_id ";
+	if ($kecamatan_id !== null && $kecamatan_id > 0) {
+		$qwhere .= " and HD.kecamatan_id = ". $kecamatan_id;
 	}
-	if (! empty ($kelurahan_id)) {
-		$qwhere .=" and kelurahan_id = ". $kelurahan_id;
-		$qgroup .=" , kelurahan_id ";
+	if ($kelurahan_id !== null && $kelurahan_id > 0) {
+		$qwhere .= " and HD.kelurahan_id = ". $kelurahan_id;
 	}
-	if (! empty ($tps_id)) {
-		$qwhere .=" and tps_id = ". $tps_id;
-		$qgroup .=" , tps_id ";
+	if ($tps_id !== null && $tps_id > 0) {
+		$qwhere .= " and HD.tps_id = ". $tps_id;
 	}
 
-	// Get data
-	$q	="
-			select	ifnull(sum(jumlah),0)		as jumlah
-			,		ifnull(sum(rusak),0)		as rusak
-			,		ifnull(sum(sisa),0)			as sisa
-			,		ifnull(sum(sah),0)			as sah
-			,		ifnull(sum(tidak_sah),0)	as tidak_sah
-			,		(
-						select	count(UTPS.tps_id)		as jumlah_tps
-						from	(
-							select	distinct tps_id
-							from	". $table_hasil ."
-							where	status = 1
-							". $qwhere ."
-						) UTPS
-					)							as jumlah_tps
-			from	". $table_hasil ."
-			where	status = 1
-		". $qwhere;
-
-	if (! empty ($qgroup)) {
-		$q .= " group by ". $qgroup;
-	}
+	$q=
+"
+select	X.partai_nama
+,		X.caleg_nama
+,		X.hasil
+,		round(((X.hasil / Y.v) * 100), 2) as persentase
+from (
+select	HD.partai_id
+,		CD.caleg_id
+,		P.nama					as partai_nama
+,		C.nama					as caleg_nama
+,		ifnull(sum(hasil),0)	as hasil
+from	". $table_hasil ."	HD
+,		". $table_caleg ."	CD
+,		caleg		C
+,		partai		P
+where	HD.status		= 1
+and		HD.caleg_id		= CD.id
+and		CD.caleg_id		= C.id
+and		HD.partai_id	= P.id
+". $qwhere ."
+group by HD.partai_id, CD.caleg_id
+order by HD.partai_id, CD.caleg_id
+) X
+, (
+	select	ifnull(sum(HD.hasil),0)	as v
+	from	". $table_hasil ."			HD
+	where	HD.status				= 1
+	". $qwhere ."
+) Y
+";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$i = 1;
 	$ps->execute ();
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
@@ -73,4 +76,4 @@ try {
 	$r['data']	= $e->getMessage ();
 }
 
-require_once "../../json_end.php";
+require_once "../../../json_end.php";
