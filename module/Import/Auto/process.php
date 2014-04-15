@@ -179,7 +179,7 @@ function processImportRekap ($dir, $table, $type)
 			Jaring::$_db->beginTransaction ();
 
 			// delete from log
-			$q		= " delete from imported where filename = ? ";
+			$q		= " delete from imported where filename like ? ";
 			$ps3	= Jaring::$_db->prepare ($q);
 			$i		= 1;
 			$ps3->bindValue ($i++, '%'. $file .'%', PDO::PARAM_STR);
