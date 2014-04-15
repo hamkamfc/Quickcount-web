@@ -16,7 +16,8 @@ try {
 	$qwhere			= "";
 	$qwhere_tps		= "";
 	$qgroup			= "";
-	$table_hasil	= "rekap_suara_dpr";
+	$table_hasil	= "hasil_dpr";
+	$table_rekap	= "rekap_suara_dpr";
 
 	if (! empty ($dapil_id)) {
 		$qwhere .=" and dapil_id = ". $dapil_id;
@@ -66,7 +67,7 @@ try {
 						and		kecamatan.dapil_id		= dapil.id
 						". $qwhere_tps ."
 					) as total_jumlah_tps
-			from	". $table_hasil ."
+			from	". $table_rekap ."
 			where	status = 1
 		". $qwhere;
 

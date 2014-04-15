@@ -132,7 +132,8 @@ function JxDashboard ()
 		,	singleApi	:false
 		,	fields		:
 			[
-				"jumlah_tps"
+				"jumlah_tps_dpr"
+			,	"jumlah_tps_dprd"
 			,	"jumlah_suara"
 			]
 		});
@@ -143,8 +144,9 @@ function JxDashboard ()
 		,	width	:400
 		,	height	:100
 		,	tpl		:new Ext.XTemplate (
-					"<div> Jumlah TPS   : {jumlah_tps} </div>"
-			,		"<div> Jumlah Suara : {jumlah_suara} </div>"
+				"<div> Jumlah TPS DPR : {jumlah_tps_dpr} </div>"
+			,	"<div> Jumlah TPS DPRD : {jumlah_tps_dprd} </div>"
+			,	"<div> Jumlah Suara : {jumlah_suara} </div>"
 			)
 		});
 
@@ -234,8 +236,9 @@ function JxDashboard ()
 		}
 
 		this.vStatus.update ({
-			jumlah_tps : r[0].get ("jumlah_tps")
-		,	jumlah_suara : r[0].get ("jumlah_suara")
+			jumlah_tps_dpr	: r[0].get ("jumlah_tps_dpr")
+		,	jumlah_tps_dprd	: r[0].get ("jumlah_tps_dprd")
+		,	jumlah_suara	: r[0].get ("jumlah_suara")
 		});
 	};
 

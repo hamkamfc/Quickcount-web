@@ -11,18 +11,27 @@ require_once "../../json_begin.php";
 try {
 $q =
 "
-select	count(TPS.tps_id)	as jumlah_tps
-,		SUARA.v				as jumlah_suara
+select	DPR.jumlah_tps_dpr
+,		DPRD.jumlah_tps_dprd
+,		SUARA.v					as jumlah_suara
 from (
-	select	distinct
-			HD.tps_id
-	from	hasil_dpr HD
-	left join (
-		select	distinct
-				tps_id
-		from	hasil_dprd
-	) HDD on HD.tps_id = HDD.tps_id
-) TPS
+	select	count(TPS_DPR.tps_id) as jumlah_tps_dpr
+	from	(
+				select	distinct
+						tps_id
+				from	hasil_dpr
+				where	status = 1
+			) TPS_DPR
+) DPR
+, (
+	select	count(TPS_DPRD.tps_id) as jumlah_tps_dprd
+	from	(
+				select	distinct
+						tps_id
+				from	hasil_dprd
+				where	status = 1
+			) TPS_DPRD
+) DPRD
 , (
 	select	DPR.v + DPRD.v as v
 	from (
