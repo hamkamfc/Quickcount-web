@@ -15,7 +15,7 @@ try {
 	$tps_id			= $_GET["tps_id"];
 	$qwhere			= "";
 	$qgroup			= "";
-	$table_hasil	= "rekap_suara_dprd";
+	$table_hasil	= "rekap_suara_dpr";
 
 	if (! empty ($dapil_id)) {
 		$qwhere .=" and dapil_id = ". $dapil_id;

@@ -3,7 +3,7 @@ require_once "../init.php";
 
 $m_main = Jaring::$_path . Jaring::$_path_mod ."/main/";
 
-if (Jaring::$_c_uid != 0) {
+if (! empty (Jaring::$_c_uid)) {
 	header ("Location:". $m_main);
 	die ();
 }

@@ -12,6 +12,7 @@ try {
 	$dapil_id		= $_GET["dapil_id"];
 	$kecamatan_id	= $_GET["kecamatan_id"];
 	$kelurahan_id	= $_GET["kelurahan_id"];
+	$tps_id			= $_GET["tps_id"];
 	$table_hasil	= "hasil_dpr";
 	$table_caleg	= "caleg_dpr";
 	$qwhere			= "";
@@ -24,6 +25,9 @@ try {
 	}
 	if ($kelurahan_id !== null && $kelurahan_id > 0) {
 		$qwhere .= " and HD.kelurahan_id = ". $kelurahan_id;
+	}
+	if ($tps_id !== null && $tps_id > 0) {
+		$qwhere .= " and HD.tps_id = ". $tps_id;
 	}
 
 	$q=
@@ -52,7 +56,7 @@ order by HD.partai_id, CD.caleg_id
 ) X
 , (
 	select	ifnull(sum(HD.hasil),0)	as v
-	from	hasil_dpr				HD
+	from	". $table_hasil ."			HD
 	where	HD.status				= 1
 	". $qwhere ."
 ) Y
