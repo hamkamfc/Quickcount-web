@@ -32,6 +32,8 @@ function JxDashboardTopTenCaleg (id, t)
 			},{
 				header		:"Total Suara"
 			,	dataIndex	:"hasil"
+			,	xtype		:"numbercolumn"
+			,	format		:"0,000"
 			}]
 		});
 
@@ -122,12 +124,70 @@ function JxDashboardChartPartai (id, t)
 	};
 }
 
-function JxDashboard ()
+function JxDashboardTop15DapilDPRD ()
 {
-	this.id		= "Dashboard";
+	this.id		= "Dashboard_Dapil_Top15DPRD";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.sStatus		= Ext.create ("Jx.Store", {
+	this.store			= Ext.create ("Jx.Store", {
+			url			:this.dir
+		,	singleApi	:false
+		,	groupField	:"dapil_nama"
+		,	fields		:
+			[
+				"dapil_nama"
+			,	"partai_nama"
+			,	"caleg_nama"
+			,	"hasil"
+			]
+		});
+
+	this.panel		= Ext.create ("Ext.grid.Panel", {
+			itemId	:this.id
+		,	title	:"Top 15 Caleg DPRD per Dapil"
+		,	width	:800
+		,	autoHeight:true
+		,	store	:this.store
+		,	features:
+			[{
+				ftype			:"grouping"
+			,	hideGroupHeader	:true
+			}]
+		,	columns	:
+			[{
+				header		:"Dapil"
+			,	dataIndex	:"dapil_nama"
+			,	width		:0
+			},{
+				header		:"Partai"
+			,	dataIndex	:"partai_nama"
+			,	width		:300
+			},{
+				header		:"Nama"
+			,	dataIndex	:"caleg_nama"
+			,	flex		:1
+			},{
+				header		:"Jumlah Suara"
+			,	dataIndex	:"hasil"
+			,	width		:140
+			,	align		:"right"
+			,	xtype		:"numbercolumn"
+			,	format		:"0,000"
+			}]
+		});
+
+	this.doRefresh = function ()
+	{
+		this.store.load ();
+	};
+}
+
+function JXDashboardStatus ()
+{
+	this.id		="Dashboard_Status";
+	this.dir	=Jx.generateModDir (this.id);
+
+	this.store			= Ext.create ("Jx.Store", {
 			url			:Jx.generateModDir ("Dashboard_Status")
 		,	singleApi	:false
 		,	fields		:
@@ -138,17 +198,53 @@ function JxDashboard ()
 			]
 		});
 
-	this.vStatus	= Ext.create ("Ext.panel.Panel", {
-			title	:"Status"
-		,	store	:this.sStatus
-		,	width	:400
-		,	height	:100
-		,	tpl		:new Ext.XTemplate (
-				"<div> Jumlah TPS DPR : {jumlah_tps_dpr} </div>"
-			,	"<div> Jumlah TPS DPRD : {jumlah_tps_dprd} </div>"
-			,	"<div> Jumlah Suara : {jumlah_suara} </div>"
-			)
+	this.panel			= Ext.create ("Ext.form.Panel", {
+			title		:"Status"
+		,	store		:this.store
+		,	width		:400
+		,	autoHeight	:true
+		,	defaultType	:"displayfield"
+		,	defaults	:
+			{
+				labelWidth	:140
+			,	renderer	:Ext.util.Format.numberRenderer ("0,000")
+			}
+		,	items		:
+			[{
+				fieldLabel	:"Jumlah TPS DPR"
+			,	name		:"jumlah_tps_dpr"
+			},{
+				fieldLabel	:"Jumlah TPS DPRD"
+			,	name		:"jumlah_tps_dprd"
+			},{
+				fieldLabel	:"Jumlah Suara"
+			,	name		:"jumlah_suara"
+			}]
 		});
+
+	this.doRefresh = function ()
+	{
+		this.store.load ();
+	};
+
+	this.updateStatus = function (s, r, success)
+	{
+		if (!success || r.length <= 0) {
+			return;
+		}
+
+		this.panel.loadRecord (r[0]);
+	};
+
+	this.store.on ("load", this.updateStatus, this);
+}
+
+function JxDashboard ()
+{
+	this.id		= "Dashboard";
+	this.dir	= Jx.generateModDir (this.id);
+
+	this.vStatus	= new JXDashboardStatus ();
 
 	this.chartPartaiDPR		= new JxDashboardChartPartai (
 			"Dashboard_Partai_DPR"
@@ -167,6 +263,8 @@ function JxDashboard ()
 			"Dashboard_Caleg_DPRD"
 		,	"Top Ten Caleg DPRD"
 		);
+
+	this.top15DapilDPRD = new JxDashboardTop15DapilDPRD ();
 
 	this.panel	= Ext.create ("Ext.panel.Panel", {
 			region		:"center"
@@ -190,7 +288,7 @@ function JxDashboard ()
 				}
 			,	items	:
 				[
-					this.vStatus
+					this.vStatus.panel
 				,	this.topTenCalegDPR.panel
 				,	this.topTenCalegDPRD.panel
 				]
@@ -199,12 +297,13 @@ function JxDashboard ()
 			,	layout	:"vbox"
 			,	defaults:
 				{
-					margin	:"0 20 0 20"
+					margin	:"0 20 20 20"
 				}
 			,	items	:
 				[
 					this.chartPartaiDPR.panel
 				,	this.chartPartaiDPRD.panel
+				,	this.top15DapilDPRD.panel
 				]
 			}]
 		});
@@ -222,25 +321,11 @@ function JxDashboard ()
 
 	this.doRefresh = function ()
 	{
-		this.sStatus.load ();
+		this.vStatus.doRefresh ();
 		this.chartPartaiDPR.doRefresh ();
 		this.chartPartaiDPRD.doRefresh ();
 		this.topTenCalegDPR.doRefresh ();
 		this.topTenCalegDPRD.doRefresh ();
+		this.top15DapilDPRD.doRefresh ();
 	};
-
-	this.updateStatus = function (s, r, success)
-	{
-		if (!success || r.length <= 0) {
-			return;
-		}
-
-		this.vStatus.update ({
-			jumlah_tps_dpr	: r[0].get ("jumlah_tps_dpr")
-		,	jumlah_tps_dprd	: r[0].get ("jumlah_tps_dprd")
-		,	jumlah_suara	: r[0].get ("jumlah_suara")
-		});
-	};
-
-	this.sStatus.on ("load", this.updateStatus, this);
 }
