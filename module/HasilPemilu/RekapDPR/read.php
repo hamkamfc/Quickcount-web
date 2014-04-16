@@ -36,23 +36,23 @@ try {
 	$qwhere = "";
 	$qgroup	= "";
 
-	if ($dapil_id !== 0 && $dapil_id !== null) {
+	if (! empty ($dapil_id)) {
 		$qwhere .=" and dapil_id = ". $dapil_id;
 		$qgroup .=" dapil_id ";
 	}
-	if ($kecamatan_id !== 0 && $kecamatan_id !== null) {
+	if (! empty ($kecamatan_id)) {
 		$qwhere .=" and kecamatan_id = ". $kecamatan_id;
 		$qgroup .=" , kecamatan_id ";
 	}
-	if ($kelurahan_id !== 0 && $kelurahan_id !== null) {
+	if (! empty ($kelurahan_id)) {
 		$qwhere .=" and kelurahan_id = ". $kelurahan_id;
 		$qgroup .=" , kelurahan_id ";
 	}
-	if ($tps_id !== 0 && $tps_id !== null) {
+	if (! empty ($tps_id)) {
 		$qwhere .=" and tps_id = ". $tps_id;
 		$qgroup .=" , tps_id ";
 	}
-	if ($kode_saksi !== '' && $kode_saksi !== null) {
+	if (! empty ($kode_saksi)) {
 		$qwhere .=" and kode_saksi = '". $kode_saksi ."' ";
 		$qgroup .=" , kode_saksi ";
 	}

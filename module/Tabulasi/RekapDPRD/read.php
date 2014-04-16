@@ -15,29 +15,24 @@ try {
 	$tps_id			= $_GET["tps_id"];
 	$qwhere			= "";
 	$qwhere_tps		= "";
-	$qgroup			= "";
 	$table_hasil	= "hasil_dprd";
 	$table_rekap	= "rekap_suara_dprd";
 
 	if (! empty ($dapil_id)) {
 		$qwhere .=" and dapil_id = ". $dapil_id;
 		$qwhere_tps	.=" and dapil.id = ". $dapil_id;
-		$qgroup .=" dapil_id ";
 	}
 	if (! empty ($kecamatan_id)) {
 		$qwhere .=" and kecamatan_id = ". $kecamatan_id;
 		$qwhere_tps	.=" and kecamatan.id = ". $kecamatan_id;
-		$qgroup .=" , kecamatan_id ";
 	}
 	if (! empty ($kelurahan_id)) {
 		$qwhere .=" and kelurahan_id = ". $kelurahan_id;
 		$qwhere_tps	.=" and tps.kelurahan_id = ". $kelurahan_id;
-		$qgroup .=" , kelurahan_id ";
 	}
 	if (! empty ($tps_id)) {
 		$qwhere .=" and tps_id = ". $tps_id;
 		$qwhere_tps .=" and tps.id = ". $tps_id;
-		$qgroup .=" , tps_id ";
 	}
 
 	// Get data
@@ -70,10 +65,6 @@ try {
 			from	". $table_rekap ."
 			where	status = 1
 		". $qwhere;
-
-	if (! empty ($qgroup)) {
-		$q .= " group by ". $qgroup;
-	}
 
 	$ps = Jaring::$_db->prepare ($q);
 	$i = 1;
