@@ -130,6 +130,7 @@ function JxInputData_DPR ()
 	,	valueField		:"kode"
 	,	displayField	:"kode"
 	,	hiddenName		:"kode"
+	,	forceSelection	:false
 	,	labelAlign		:"right"
 	,	labelWidth		:120
 	,	width			:400

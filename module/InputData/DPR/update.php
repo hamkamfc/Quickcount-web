@@ -14,7 +14,7 @@ try {
 	$kelurahan_id	= $_GET["kelurahan_id"];
 	$tps_id			= $_GET["tps_id"];
 	$kode_saksi		= $_GET["kode_saksi"];
-	$table_hasil	= "hasil_dprd";
+	$table_hasil	= "hasil_dpr";
 
 	$data = json_decode (file_get_contents('php://input'), true);
 
