@@ -9,22 +9,24 @@
 require_once "../../json_begin.php";
 
 try {
-	$query	= $_GET["query"];
-	$filter = json_decode ($_GET["filter"]);
-
-	// Get total row
-	$q	="	select	COUNT(id) as total"
-		."	from	saksi"
-		."	where	kode like ? ";
+	$query		= $_GET["query"];
+	$filter		= json_decode ($_GET["filter"]);
+	$qfilter	= "";
 
 	if (count($filter) > 0) {
 		for ($i = 0; $i < count($filter); $i++) {
-			$q .=" and ". $filter[$i]->property ." = ". $filter[$i]->value;
+			$qfilter .=" and ". $filter[$i]->property ." = ". $filter[$i]->value;
 		}
 	}
 
+	// Get total row
+	$q	=
+"	select	COUNT(id) as total
+	from	saksi
+	where	1 = 1
+".	$qfilter;
+
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->bindValue (1, "%". $query ."%");
 	$ps->execute ();
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
@@ -34,23 +36,16 @@ try {
 	}
 
 	// Get data
-	$q	="	select		id"
-		."	,			kode"
-		."	from		saksi"
-		."	where		kode like ?";
-
-	if (count($filter) > 0) {
-		for ($i = 0; $i < count($filter); $i++) {
-			$q .=" and ". $filter[$i]->property ." = ". $filter[$i]->value;
-		}
-	}
+	$q	="
+			select		kode
+			from		saksi
+			where		1 = 1
+		". $qfilter;
 
 	$q	.="	order by	id"
 		."	limit		". (int) $_GET["start"] .",". (int) $_GET["limit"];
 
 	$ps = Jaring::$_db->prepare ($q);
-	$i	= 1;
-	$ps->bindValue ($i++, "%". $query ."%");
 	$ps->execute ();
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
@@ -65,4 +60,3 @@ try {
 }
 
 require_once "../../json_end.php";
-
