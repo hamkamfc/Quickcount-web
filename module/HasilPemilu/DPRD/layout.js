@@ -27,6 +27,7 @@ function JxHasilPemilu_DPRD ()
 	,	valueField		:"id"
 	,	displayField	:"nama"
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.sKecamatan = Ext.create ("Jx.StorePaging", {
@@ -46,6 +47,7 @@ function JxHasilPemilu_DPRD ()
 	,	valueField		:"id"
 	,	displayField	:"nama"
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.sKelurahan = Ext.create ("Jx.StorePaging", {
@@ -65,6 +67,7 @@ function JxHasilPemilu_DPRD ()
 	,	valueField		:"id"
 	,	displayField	:"nama"
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.sTPS		= Ext.create ("Jx.StorePaging", {
@@ -86,6 +89,7 @@ function JxHasilPemilu_DPRD ()
 	,	valueField		:"id"
 	,	displayField	:"nama"
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	,	tpl				: Ext.create('Ext.XTemplate'
 				,'<tpl for=".">'
 				,	'<div class="x-boundlist-item">{no} - {alamat}</div>'
@@ -115,6 +119,7 @@ function JxHasilPemilu_DPRD ()
 	,	displayField	:"kode"
 	,	hiddenName		:"kode"
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.cbDapilOnSelect = function (cb, r, e)
@@ -172,13 +177,10 @@ function JxHasilPemilu_DPRD ()
 	});
 
 	this.form = Ext.create ("Ext.form.Panel", {
-		region	:"center"
-	,	defaults:
-		{
-			labelAlign	:"right"
-		,	labelWidth	:200
-		,	width		:400
-		}
+		title	:"Filter Data"
+	,	region	:"center"
+	,	bodyPadding	:"10"
+	,	layout		:"anchor"
 	,	items	:
 		[{
 			xtype	:"numberfield"
@@ -218,7 +220,7 @@ function JxHasilPemilu_DPRD ()
 		store	:this.sHasil
 	,	stateful:false
 	,	region	:"east"
-	,	width	:"30%"
+	,	width	:"40%"
 	,	split	:true
 	,	title	:"Raw Data (Dari Semua Saksi)"
 	,	features:

@@ -28,9 +28,8 @@ function JxInputData_DPRD ()
 	,	displayField	:"nama"
 	,	editable		:false
 	,	labelAlign		:"right"
-	,	labelWidth		:120
-	,	width			:400
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.sKecamatan = Ext.create ("Jx.StorePaging", {
@@ -51,9 +50,8 @@ function JxInputData_DPRD ()
 	,	displayField	:"nama"
 	,	editable		:false
 	,	labelAlign		:"right"
-	,	labelWidth		:120
-	,	width			:400
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.sKelurahan = Ext.create ("Jx.StorePaging", {
@@ -74,9 +72,8 @@ function JxInputData_DPRD ()
 	,	displayField	:"nama"
 	,	editable		:false
 	,	labelAlign		:"right"
-	,	labelWidth		:120
-	,	width			:400
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.sTPS		= Ext.create ("Jx.StorePaging", {
@@ -98,6 +95,7 @@ function JxInputData_DPRD ()
 	,	valueField		:"id"
 	,	displayField	:"nama"
 	,	editable		:false
+	,	anchor			:"100%"
 	,	tpl				: Ext.create('Ext.XTemplate'
 				,'<tpl for=".">'
 				,	'<div class="x-boundlist-item">{no} - {alamat}</div>'
@@ -109,8 +107,6 @@ function JxInputData_DPRD ()
 				,	'</tpl>'
 			)
 	,	labelAlign		:"right"
-	,	labelWidth		:120
-	,	width			:400
 	,	allowBlank		:false
 	});
 
@@ -132,9 +128,8 @@ function JxInputData_DPRD ()
 	,	hiddenName		:"kode"
 	,	forceSelection	:false
 	,	labelAlign		:"right"
-	,	labelWidth		:120
-	,	width			:400
 	,	allowBlank		:false
+	,	anchor			:"100%"
 	});
 
 	this.bReload	= Ext.create ("Ext.button.Button", {
@@ -149,10 +144,10 @@ function JxInputData_DPRD ()
 	});
 
 	this.form		= Ext.create ("Ext.form.Panel", {
-		region		:"center"
-	,	defaults	:
-		{
-		}
+		title		:"Pilih / Input Kode Saksi"
+	,	region		:"center"
+	,	bodyPadding	:"10"
+	,	layout		:"anchor"
 	,	items	:
 		[{
 			xtype	:"numberfield"
@@ -193,7 +188,7 @@ function JxInputData_DPRD ()
 		store	:this.sHasil
 	,	stateful:false
 	,	region	:"east"
-	,	width	:"30%"
+	,	width	:"40%"
 	,	split	:true
 	,	title	:"Input Data > DPRD"
 	,	selType	:"cellmodel"
@@ -251,12 +246,14 @@ function JxInputData_DPRD ()
 	});
 
 	this.formRekap = Ext.create ("Ext.form.Panel", {
-		title		:"Rekap Suara"
+		title		:"Input Rekap Suara"
 	,	disabled	:true
 	,	defaultType	:"numberfield"
 	,	region		:"east"
 	,	width		:"30%"
 	,	split		:true
+	,	bodyPadding	:"10"
+	,	layout		:"anchor"
 	,	defaults	:
 			{
 				allowDecimals	:false
@@ -264,7 +261,8 @@ function JxInputData_DPRD ()
 			,	value			:0
 			,	minValue		:0
 			,	labelAlign		:"right"
-			,	labelWidth		:180
+			,	labelWidth		:150
+			,	anchor			:"100%"
 			,	listeners	:{
 					change	:{
 						fn		:function (f, n, o) {

@@ -25,6 +25,7 @@ function JxTabulasi_Caleg_DPR ()
 	,	fieldLabel		:"Dapil"
 	,	valueField		:"id"
 	,	displayField	:"nama"
+	,	anchor			:"100%"
 	});
 
 	this.sKecamatan = Ext.create ("Jx.StorePaging", {
@@ -43,6 +44,7 @@ function JxTabulasi_Caleg_DPR ()
 	,	fieldLabel		:"Kecamatan"
 	,	valueField		:"id"
 	,	displayField	:"nama"
+	,	anchor			:"100%"
 	});
 
 	this.sKelurahan = Ext.create ("Jx.StorePaging", {
@@ -61,6 +63,7 @@ function JxTabulasi_Caleg_DPR ()
 	,	fieldLabel		:"Kelurahan"
 	,	valueField		:"id"
 	,	displayField	:"nama"
+	,	anchor			:"100%"
 	});
 
 	this.sTPS		= Ext.create ("Jx.StorePaging", {
@@ -81,6 +84,7 @@ function JxTabulasi_Caleg_DPR ()
 	,	fieldLabel		:"TPS"
 	,	valueField		:"id"
 	,	displayField	:"nama"
+	,	anchor			:"100%"
 	,	tpl				: Ext.create('Ext.XTemplate'
 				,'<tpl for=".">'
 				,	'<div class="x-boundlist-item">{no} - {alamat}</div>'
@@ -100,8 +104,10 @@ function JxTabulasi_Caleg_DPR ()
 	this.form	= Ext.create ("Ext.form.Panel", {
 		title	:"Filter Data"
 	,	region	:"west"
-	,	width	:"35%"
+	,	width	:"30%"
 	,	split	:true
+	,	bodyPadding	:"10"
+	,	layout		:"anchor"
 	,	items	:
 		[
 			this.cbDapil
