@@ -81,7 +81,7 @@ function JxTabulasi_Caleg_DPR ()
 	,	fieldLabel		:"TPS"
 	,	valueField		:"id"
 	,	displayField	:"nama"
-    ,	tpl				: Ext.create('Ext.XTemplate'
+	,	tpl				: Ext.create('Ext.XTemplate'
 				,'<tpl for=".">'
 				,	'<div class="x-boundlist-item">{no} - {alamat}</div>'
 				,'</tpl>'
@@ -102,11 +102,6 @@ function JxTabulasi_Caleg_DPR ()
 	,	region	:"west"
 	,	width	:"35%"
 	,	split	:true
-	,	defaults:
-		{
-			width		:400
-		,	labelAlign	:"right"
-		}
 	,	items	:
 		[
 			this.cbDapil
@@ -165,8 +160,9 @@ function JxTabulasi_Caleg_DPR ()
 		},{
 			header		:"Hasil"
 		,	dataIndex	:"hasil"
-		,	width		:200
+		,	width		:80
 		,	summaryType	:"sum"
+		,	renderer	:Ext.util.Format.numberRenderer ("0,000")
 		},{
 			header		:"Persentase"
 		,	dataIndex	:"persentase"
@@ -208,6 +204,7 @@ function JxTabulasi_Caleg_DPR ()
 		{
 			labelAlign	:"right"
 		,	labelWidth	:200
+		,	renderer	:Ext.util.Format.numberRenderer ("0,000")
 		}
 	,	items		:
 		[{

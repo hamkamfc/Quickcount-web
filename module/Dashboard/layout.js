@@ -23,7 +23,7 @@ function JxDashboardTopTenCaleg (id, t)
 		,	title	:t
 		,	store	:this.store
 		,	width	:400
-		,	height	:400
+		,	autoHeight	:true
 		,	columns	:
 			[{
 				header		:"Nama"

@@ -26,6 +26,7 @@ function JxHasilPemilu_DPRD ()
 	,	fieldLabel		:"Dapil"
 	,	valueField		:"id"
 	,	displayField	:"nama"
+	,	allowBlank		:false
 	});
 
 	this.sKecamatan = Ext.create ("Jx.StorePaging", {
@@ -44,6 +45,7 @@ function JxHasilPemilu_DPRD ()
 	,	fieldLabel		:"Kecamatan"
 	,	valueField		:"id"
 	,	displayField	:"nama"
+	,	allowBlank		:false
 	});
 
 	this.sKelurahan = Ext.create ("Jx.StorePaging", {
@@ -62,6 +64,7 @@ function JxHasilPemilu_DPRD ()
 	,	fieldLabel		:"Kelurahan"
 	,	valueField		:"id"
 	,	displayField	:"nama"
+	,	allowBlank		:false
 	});
 
 	this.sTPS		= Ext.create ("Jx.StorePaging", {
@@ -82,7 +85,8 @@ function JxHasilPemilu_DPRD ()
 	,	fieldLabel		:"TPS"
 	,	valueField		:"id"
 	,	displayField	:"nama"
-    ,	tpl				: Ext.create('Ext.XTemplate'
+	,	allowBlank		:false
+	,	tpl				: Ext.create('Ext.XTemplate'
 				,'<tpl for=".">'
 				,	'<div class="x-boundlist-item">{no} - {alamat}</div>'
 				,'</tpl>'
@@ -110,6 +114,7 @@ function JxHasilPemilu_DPRD ()
 	,	valueField		:"kode"
 	,	displayField	:"kode"
 	,	hiddenName		:"kode"
+	,	allowBlank		:false
 	});
 
 	this.cbDapilOnSelect = function (cb, r, e)
@@ -163,6 +168,7 @@ function JxHasilPemilu_DPRD ()
 	this.bSetDefault	= Ext.create ("Ext.button.Button", {
 		text			:"Set Saksi sebagai Default"
 	,	tooltip			:"Saksi yang dipilih akan digunakan menjadi perhitungan quick-count di TPS yang bersangkutan."
+	,	formBind		:true
 	});
 
 	this.form = Ext.create ("Ext.form.Panel", {
@@ -215,13 +221,6 @@ function JxHasilPemilu_DPRD ()
 	,	width	:"30%"
 	,	split	:true
 	,	title	:"Raw Data (Dari Semua Saksi)"
-	,	selType	:"cellmodel"
-    ,	plugins	:
-		[
-			Ext.create('Ext.grid.plugin.CellEditing', {
-				clicksToEdit: 1
-			})
-		]
 	,	features:
 		[{
 			ftype			:"groupingsummary"
@@ -240,13 +239,8 @@ function JxHasilPemilu_DPRD ()
 		},{
 			header		:"Hasil"
 		,	dataIndex	:"hasil"
-		,	editor		:
-			{
-				xtype			:"numberfield"
-			,	allowDecimals	:false
-			,	minValue		:0
-			,	hideTrigger		:true
-			}
+		,	align		:"right"
+		,	renderer	:Ext.util.Format.numberRenderer ("0,000")
 		}]
 	});
 
@@ -271,27 +265,17 @@ function JxHasilPemilu_DPRD ()
 
 	this.formRekap = Ext.create ("Ext.form.Panel", {
 		title		:"Rekap Suara"
-	,	defaultType	:"numberfield"
+	,	defaultType	:"displayfield"
 	,	region		:"east"
 	,	width		:"30%"
 	,	split		:true
 	,	defaults	:
-			{
-				allowDecimals	:false
-			,	hideTrigger		:true
-			,	value			:0
-			,	minValue		:0
-			,	labelAlign		:"right"
-			,	labelWidth		:200
-			,	listeners	:{
-					change	:{
-						fn		:function (f, n, o) {
-							HasilPemilu_DPRD.updateRekap();
-						}
-					,	scope	:this
-					}
-				}
-			}
+		{
+			value			:0
+		,	labelAlign		:"right"
+		,	labelWidth		:200
+		,	renderer		:Ext.util.Format.numberRenderer ("0,000")
+		}
 	,	items		:
 		[{
 			fieldLabel	:"Jumlah Surat Suara"
@@ -343,18 +327,6 @@ function JxHasilPemilu_DPRD ()
 		this.sRekap.filter (filters);
 	};
 
-	this.updateHasil = function (ed, newv, oldv)
-	{
-		this.sHasil.getProxy ().extraParams = {
-			dapil_id		: this.cbDapil.getValue ()
-		,	kecamatan_id	: this.cbKecamatan.getValue ()
-		,	kelurahan_id	: this.cbKelurahan.getValue ()
-		,	tps_id			: this.cbTPS.getValue ()
-		,	kode_saksi		: this.cbSaksi.getRawValue ()
-		};
-		this.sHasil.sync ();
-	};
-
 	this.sRekapLoaded = function (store, records, s)
 	{
 		if (!s) {
@@ -399,24 +371,6 @@ function JxHasilPemilu_DPRD ()
 		});
 	};
 
-	this.updateRekap = function (ed, newv, oldv)
-	{
-		if (this.onload) {
-			return;
-		}
-
-		this.formRekap.submit ({
-			url		:this.sRekap.url +"/update.php"
-		,	params	:{
-				dapil_id		: this.cbDapil.getValue ()
-			,	kecamatan_id	: this.cbKecamatan.getValue ()
-			,	kelurahan_id	: this.cbKelurahan.getValue ()
-			,	tps_id			: this.cbTPS.getValue ()
-			,	kode_saksi		: this.cbSaksi.getRawValue ()
-			}
-		});
-	};
-
 	this.doRefresh = function (perm)
 	{
 		this.sDapil.load ();
@@ -429,7 +383,6 @@ function JxHasilPemilu_DPRD ()
 
 	this.bReload.on ("click", this.reloadDetail, this);
 	this.bSetDefault.on ("click", this.setSaksiAsDefault, this);
-	this.grid.on ("edit", this.updateHasil, this);
 
 	this.sRekap.on("load", this.sRekapLoaded, this);
 }
