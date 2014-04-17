@@ -12,6 +12,28 @@ function updateStatusHasil ($table_hasil)
 {
 	$q=
 "
+	update	". $table_hasil ." H1
+	,		(
+		select	distinct
+				tps_id
+		from	". $table_hasil ."
+		where	status = 0
+	) H2
+	set		H1.status = 0
+	where	H1.status = 1
+	and		H1.tps_id = H2.tps_id
+";
+
+	Jaring::$_db->beginTransaction ();
+
+	$ps = Jaring::$_db->prepare ($q);
+	$ps->execute ();
+	$ps->closeCursor ();
+
+	Jaring::$_db->commit ();
+
+	$q=
+"
 update ". $table_hasil ." HD
 , (
 	select A.*
@@ -61,6 +83,7 @@ and		HD.kode_saksi	= X.kode_saksi;
 ";
 
 	Jaring::$_db->beginTransaction ();
+
 	$ps = Jaring::$_db->prepare ($q);
 	$ps->execute ();
 	$ps->closeCursor ();
