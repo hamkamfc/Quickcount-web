@@ -7,9 +7,31 @@
  */
 
 require_once "../../json_begin.php";
+require_once "../process.php";
 
 $rs	= [];
 $t	= 0;
+
+function process_import_fail ($file, $type)
+{
+	$q		="
+				insert into imported (
+				  type
+				, filename
+				, status
+				) values (
+					? , ? , 0
+				) on duplicate key update
+				  status	= 0
+				, _when		= NOW()
+			";
+	$ps	= Jaring::$_db->prepare ($q);
+	$i		= 1;
+	$ps->bindValue ($i++, $type, PDO::PARAM_INT);
+	$ps->bindValue ($i++, $file, PDO::PARAM_STR);
+	$ps->execute ();
+	$ps->closeCursor ();
+}
 
 function processImportHasil ($dir, $table, $type)
 {
@@ -22,125 +44,10 @@ function processImportHasil ($dir, $table, $type)
 	}
 
 	foreach ($ls as $file) {
-		$data = [];
-
 		try {
-			$f = fopen($file, "r");
-			if ($f !== FALSE) {
-				$r = fgetcsv($f, 0, ";");
-				while ($r !== FALSE) {
-					$data[]	= $r;
-					$r		= fgetcsv($f, 0, ";");
-				}
-
-				fclose ($f);
-			} else {
-				continue;
-			}
-
-			if (count($data) <= 0) {
-				continue;
-			}
-
-			Jaring::$_db->beginTransaction ();
-
-			// delete from log
-			$q		= " delete from imported where filename like ? ";
-			$ps3	= Jaring::$_db->prepare ($q);
-			$i		= 1;
-			$ps3->bindValue ($i++, '%'. $file .'%', PDO::PARAM_STR);
-			$ps3->execute ();
-			$ps3->closeCursor ();
-
-			// delete existing data
-			$q	="	delete	from ". $table
-				."	where	dapil_id		= ?"
-				."	and		kecamatan_id	= ?"
-				."	and		kelurahan_id	= ?"
-				."	and		tps_id			= ?"
-				."	and		kode_saksi		= ?"
-				."	and		partai_id		= ?"
-				."	and		caleg_id		= ?";
-
-			$ps1 = Jaring::$_db->prepare ($q);
-
-			foreach ($data as $in) {
-				$i = 1;
-				$ps1->bindValue ($i++, $in[0], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[1], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[2], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[3], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[4], PDO::PARAM_STR);
-				$ps1->bindValue ($i++, $in[5], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[6], PDO::PARAM_INT);
-				$ps1->execute ();
-			}
-
-			$ps1->closeCursor ();
-
-			Jaring::$_db->commit ();
-			Jaring::$_db->beginTransaction ();
-
-			$q	=
-				"
-					insert into ". $table ." (
-					  dapil_id
-					, kecamatan_id
-					, kelurahan_id
-					, tps_id
-					, kode_saksi
-					, caleg_id
-					, partai_id
-					, hasil
-					) values
-				";
-
-			$qv = " ( ?, ?, ?, ?, ?, ?, ?, ? ) ";
-			$bv = array ();
-
-			$first = true;
-			foreach ($data as $in) {
-				if ($first) {
-					$q .= $qv;
-					$first = false;
-				} else {
-					$q .= ", ". $qv;
-				}
-				$bv = array_merge ($bv, $in);
-			}
-
-			$ps2 = Jaring::$_db->prepare ($q);
-			$ps2->execute ($bv);
-			$ps2->closeCursor ();
-
-			// insert into log
-			$q		= " insert into imported (type, filename, status) values ( ? , ? , 1 )";
-			$ps3	= Jaring::$_db->prepare ($q);
-			$i		= 1;
-			$ps3->bindValue ($i++, $type, PDO::PARAM_INT);
-			$ps3->bindValue ($i++, $file, PDO::PARAM_STR);
-			$ps3->execute ();
-			$ps3->closeCursor ();
-
-			$rs[]	= array (
-						'filename'	=> $file
-					,	'_when'		=> 0
-					);
-			$t++;
-
-			Jaring::$_db->commit ();
-
+			process_import_suara ($file, $type, $table);
 		} catch (Exception $e) {
-			Jaring::$_db->rollback ();
-
-			// insert into log as failed
-			$q		= " insert into imported (type, filename, status) values ( ? , ? , 0 )";
-			$ps3	= Jaring::$_db->prepare ($q);
-			$i		= 1;
-			$ps3->bindValue ($i++, $type, PDO::PARAM_INT);
-			$ps3->bindValue ($i++, $file, PDO::PARAM_STR);
-			$ps3->execute ();
-			$ps3->closeCursor ();
+			process_import_fail ($file, $type);
 		}
 	}
 }
@@ -159,118 +66,9 @@ function processImportRekap ($dir, $table, $type)
 		$data = [];
 
 		try {
-			$f = fopen($file, "r");
-			if ($f !== FALSE) {
-				$r = fgetcsv($f, 0, ";");
-				while ($r !== FALSE) {
-					$data[]	= $r;
-					$r		= fgetcsv($f, 0, ";");
-				}
-
-				fclose ($f);
-			} else {
-				continue;
-			}
-
-			if (count($data) <= 0) {
-				continue;
-			}
-
-			Jaring::$_db->beginTransaction ();
-
-			// delete from log
-			$q		= " delete from imported where filename like ? ";
-			$ps3	= Jaring::$_db->prepare ($q);
-			$i		= 1;
-			$ps3->bindValue ($i++, '%'. $file .'%', PDO::PARAM_STR);
-			$ps3->execute ();
-			$ps3->closeCursor ();
-
-			// delete existing data
-			$q	="	delete	from ". $table
-				."	where	dapil_id		= ?"
-				."	and		kecamatan_id	= ?"
-				."	and		kelurahan_id	= ?"
-				."	and		tps_id			= ?"
-				."	and		kode_saksi		= ?";
-
-			$ps1 = Jaring::$_db->prepare ($q);
-
-			foreach ($data as $in) {
-				$i = 1;
-				$ps1->bindValue ($i++, $in[0], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[1], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[2], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[3], PDO::PARAM_INT);
-				$ps1->bindValue ($i++, $in[4], PDO::PARAM_STR);
-				$ps1->execute ();
-			}
-
-			$ps1->closeCursor ();
-
-			Jaring::$_db->commit ();
-			Jaring::$_db->beginTransaction ();
-
-			$q	=
-	"
-		insert into ". $table ." (
-		  dapil_id
-		, kecamatan_id
-		, kelurahan_id
-		, tps_id
-		, kode_saksi
-		, jumlah
-		, rusak
-		, sisa
-		, sah
-		, tidak_sah
-		) values
-	";
-			$qv = " ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
-			$bv = array ();
-
-			$first = true;
-			foreach ($data as $in) {
-				if ($first) {
-					$q		.= $qv;
-					$first	= false;
-				} else {
-					$q	.= ", ". $qv;
-				}
-				$bv = array_merge ($bv, $in);
-			}
-
-			$ps2 = Jaring::$_db->prepare ($q);
-			$ps2->execute ($bv);
-			$ps2->closeCursor ();
-
-			// insert into log
-			$q		= " insert into imported (type, filename, status) values ( ? , ? , 1 )";
-			$ps3	= Jaring::$_db->prepare ($q);
-			$i		= 1;
-			$ps3->bindValue ($i++, $type, PDO::PARAM_INT);
-			$ps3->bindValue ($i++, $file, PDO::PARAM_STR);
-			$ps3->execute ();
-			$ps3->closeCursor ();
-
-			$rs[]	= array (
-						'filename'	=> $file
-					,	'_when'		=> date('Y-m-d H:i:s')
-					);
-			$t++;
-
-			Jaring::$_db->commit ();
+			process_import_suara ($file, $type, $table);
 		} catch (Exception $e) {
-			Jaring::$_db->rollback ();
-
-			// insert into log as failed
-			$q		= " insert into imported (type, filename, status) values ( ? , ? , 0 )";
-			$ps3	= Jaring::$_db->prepare ($q);
-			$i		= 1;
-			$ps3->bindValue ($i++, $type, PDO::PARAM_INT);
-			$ps3->bindValue ($i++, $file, PDO::PARAM_STR);
-			$ps3->execute ();
-			$ps3->closeCursor ();
+			process_import_fail ($file, $type);
 		}
 	}
 }
