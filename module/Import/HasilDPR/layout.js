@@ -44,6 +44,7 @@ function JxImport_HasilDPR ()
 		,	scope		:this
 		,	handler		:function (b)
 			{
+				Jx.showMask ();
 				Import_HasilDPR.uploader.start ();
 			}
 		}]
@@ -118,6 +119,7 @@ function JxImport_HasilDPR ()
 			this.uploader.bind ("FilesAdded", this.bImportClick);
 			this.uploader.bind ("UploadProgress", this.uploadProgress);
 			this.uploader.bind ("Error", this.uploadError);
+			this.uploader.bind ("UploadComplete", this.uploadComplete);
 		}
 		, this
 	);
@@ -148,6 +150,12 @@ function JxImport_HasilDPR ()
 			g.getView ().refresh ();
 		}
 	};
+
+	this.uploadComplete = function ()
+	{
+		Import_HasilDPR.store.load ();
+		Jx.hideMask ();
+	}
 
 	this.uploadError = function (up, err)
 	{

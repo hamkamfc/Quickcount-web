@@ -43,6 +43,7 @@ function JxImport_SuratSuaraDPRD ()
 		,	scope		:this
 		,	handler		:function (b)
 			{
+				Jx.showMask ();
 				Import_SuratSuaraDPRD.uploader.start ();
 			}
 		}]
@@ -117,6 +118,7 @@ function JxImport_SuratSuaraDPRD ()
 			this.uploader.bind ("FilesAdded", this.bImportClick);
 			this.uploader.bind ("UploadProgress", this.uploadProgress);
 			this.uploader.bind ("Error", this.uploadError);
+			this.uploader.bind ("UploadComplete", this.uploadComplete);
 		}
 		, this
 	);
@@ -147,6 +149,12 @@ function JxImport_SuratSuaraDPRD ()
 			g.getView ().refresh ();
 		}
 	};
+
+	this.uploadComplete = function ()
+	{
+		Import_SuratSuaraDPRD.store.load ();
+		Jx.hideMask ();
+	}
 
 	this.uploadError = function (up, err)
 	{

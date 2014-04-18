@@ -138,19 +138,28 @@ if (count ($data) > 0) {
 		."	and		tps_id			= ?"
 		."	and		kode_saksi		= ?";
 
-	$ps = Jaring::$_db->prepare ($q);
+	try {
+		Jaring::$_db->beginTransaction ();
 
-	foreach ($data as $in) {
-		$i = 1;
-		$ps->bindValue ($i++, $in[0], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[1], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[2], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[3], PDO::PARAM_INT);
-		$ps->bindValue ($i++, $in[4], PDO::PARAM_STR);
-		$ps->execute ();
+		$ps = Jaring::$_db->prepare ($q);
+
+		foreach ($data as $in) {
+			$i = 1;
+			$ps->bindValue ($i++, $in[0], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[1], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[2], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[3], PDO::PARAM_INT);
+			$ps->bindValue ($i++, $in[4], PDO::PARAM_STR);
+			$ps->execute ();
+		}
+
+		Jaring::$_db->commit ();
+	} catch (Exception $e) {
+		Jaring::$_db->rollback ();
 	}
 
 	$ps->closeCursor ();
+	$ps = null;
 
 	$q	=" insert into rekap_suara_dpr ("
 		."	dapil_id"
@@ -166,11 +175,23 @@ if (count ($data) > 0) {
 		.") values ("
 		." ?, ?, ?, ?, ?, ?, ?, ?, ?, ?"
 		.")";
-	$ps = Jaring::$_db->prepare ($q);
 
-	foreach ($data as $in) {
-		$ps->execute ($in);
+	try {
+		Jaring::$_db->beginTransaction ();
+
+		$ps = Jaring::$_db->prepare ($q);
+
+		foreach ($data as $in) {
+			$ps->execute ($in);
+		}
+
+		Jaring::$_db->commit ();
+	} catch (Exception $e) {
+		Jaring::$_db->rollback ();
 	}
+
+	$ps->closeCursor ();
+	$ps = null;
 }
 
 $q = " insert into imported (type, filename, status) values ( 3 , ? , 1 )";
