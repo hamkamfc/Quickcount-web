@@ -69,8 +69,7 @@ from	". $table_hasil ."	HD
 ,		". $table_caleg ."	CD
 ,		caleg		C
 ,		partai		P
-where	1				= 1
-and		HD.caleg_id		= CD.id
+where 	HD.caleg_id		= CD.id
 and		CD.caleg_id		= C.id
 and		HD.partai_id	= P.id
 ". $qwhere ."
